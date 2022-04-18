@@ -1,12 +1,11 @@
-﻿using Assets.SpaceModel.Extensions;
-using System;
+﻿using System;
 
 namespace Assets.SpaceModel
 {
     /// <summary>
     /// Общий класс игровых объектов.
     /// </summary>
-    public abstract class SpaceObject
+    public abstract class SpaceObject : ModelLogger
     {
         /// <summary>
         /// Тип этого объекта.
@@ -110,34 +109,5 @@ namespace Assets.SpaceModel
         public event Action? OnDestroed;
 
         #endregion Очки жизни.
-
-        #region Logging
-
-        /// <summary>
-        /// Напечатать сообщение.
-        /// </summary>
-        /// <param name="text"></param>
-        protected void LogMessage(String text)
-        {
-            LoggerAdapter.instance.LogMessage(text);
-        }
-        /// <summary>
-        /// Напечатать предупреждение.
-        /// </summary>
-        /// <param name="text"></param>
-        protected void WarningMessage(String text)
-        {
-            LoggerAdapter.instance.WarningMessage(text);
-        }
-        /// <summary>
-        /// Напечатать ошибку.
-        /// </summary>
-        /// <param name="text"></param>
-        protected void ErrorMessage(String text)
-        {
-            LoggerAdapter.instance.ErrorMessage(text);
-        }
-
-        #endregion Logging
     }
 }

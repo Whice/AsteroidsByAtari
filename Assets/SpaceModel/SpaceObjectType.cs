@@ -1,9 +1,11 @@
-﻿namespace Assets.SpaceModel
+﻿using System;
+
+namespace Assets.SpaceModel
 {
     /// <summary>
     /// Тип космического объекта.
     /// </summary>
-    public enum SpaceObjectType
+    public enum SpaceObjectType : Byte
     {
         /// <summary>
         /// Неопознано.

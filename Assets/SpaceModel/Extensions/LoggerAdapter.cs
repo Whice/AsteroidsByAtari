@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.SpaceModel.Extensions
 {
@@ -89,6 +86,7 @@ namespace Assets.SpaceModel.Extensions
             foreach (object obj in objs)
             {
                 sb.Append(obj.ToString());  
+                sb.Append(" ");  
             }
             return sb.ToString();
         }

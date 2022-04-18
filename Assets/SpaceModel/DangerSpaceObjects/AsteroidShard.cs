@@ -1,5 +1,4 @@
-﻿
-namespace Assets.SpaceModel.DangerSpaceObjects
+﻿namespace Assets.SpaceModel.DangerSpaceObjects
 {
     internal class AsteroidShard : DangerSpaceObject
     {

@@ -9,11 +9,47 @@ namespace Assets.SpaceModel.PlayerClasses
     /// </summary>
     public class PlayerShip : SpaceObject
     {
+        #region Singleton
+
+        private PlayerShip() :base(SpaceObjectType.player) { }
+        private static PlayerShip instancePrivate = null;
+        public static PlayerShip instance
+        {
+            get
+            {
+                if (instancePrivate == null)
+                {
+                    instancePrivate = new PlayerShip();
+                }
+
+                return instancePrivate;
+            }
+        }
+
+        #endregion Singleton
+
         /// <summary>
         /// Счет игрока.
         /// </summary>
-        public Int64 score = 0;
-        public PlayerShip() : base(SpaceObjectType.player) { }
+        public Int64 scorePrivate = 0;
+        /// <summary>
+        /// Счет игрока. Он может только увеличиваться.
+        /// </summary>
+        public Int64 score
+        {
+            get
+            {
+                return this.scorePrivate;
+            }
+            set
+            {
+                if (value > this.scorePrivate)
+                {
+                    this.scorePrivate = value;
+                }
+            }
+        }
+
 
         public override Boolean CollideWithObject(SpaceObject spaceObject)
         {

@@ -1,5 +1,4 @@
-﻿
-namespace Assets.SpaceModel.DangerSpaceObjects
+﻿namespace Assets.SpaceModel.DangerSpaceObjects
 {
     /// <summary>
     /// Корабль пришельцев. Назвал стереотипно НЛО.
