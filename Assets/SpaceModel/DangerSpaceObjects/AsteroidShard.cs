@@ -1,8 +1,9 @@
 ﻿
 namespace Assets.SpaceModel.DangerSpaceObjects
 {
-    internal class AsteroidShard : SpaceObject
+    internal class AsteroidShard : DangerSpaceObject
     {
         public AsteroidShard() : base(SpaceObjectType.asteroidShard) { }
+
     }
 }

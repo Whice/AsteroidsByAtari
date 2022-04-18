@@ -68,12 +68,25 @@ namespace Assets.SpaceModel
 
         #endregion Изменение свойств.
 
+        #region Столкновение.
+
+        /// <summary>
+        /// Столкнуть этот объект с указаным объектом.
+        /// </summary>
+        /// <param name="spaceObject"></param>
+        /// <returns>true, если надо совершить какое-то дополнительное действие
+        /// в зависимости от типа одного из объектов.
+        /// <br/>Какие именно действия будут совершаться, будут решать правила игры.</returns>
+        public abstract Boolean CollideWithObject(SpaceObject spaceObject);
+
+        #endregion Столкновение.
+
         #region Очки жизни.
 
         /// <summary>
         /// Количество очков жизни.
         /// </summary>
-        protected Int32 hpProtected = 1;
+        private Int32 hpPrivate = 1;
         /// <summary>
         /// Количество очков жизни.
         /// </summary>
@@ -81,11 +94,11 @@ namespace Assets.SpaceModel
         {
             get
             {
-                return this.hpProtected;
+                return this.hpPrivate;
             }
             set
             {
-                SetValueProperty(nameof(this.hp), ref this.hpProtected, value);
+                SetValueProperty(nameof(this.hp), ref this.hpPrivate, value);
             }
         }
 
