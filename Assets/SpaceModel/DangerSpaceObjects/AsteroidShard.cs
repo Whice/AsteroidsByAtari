@@ -1,9 +1,8 @@
-﻿using System;
-
-namespace SpaceModel.DangerSpaceObjects
+﻿
+namespace Assets.SpaceModel.DangerSpaceObjects
 {
-    internal class AsteroidShard<Vector> : SpaceObject<Vector>
+    internal class AsteroidShard : SpaceObject
     {
-        public AsteroidShard(Vector direction, Vector position) : base(direction, position) { }
+        public AsteroidShard() : base(SpaceObjectType.asteroidShard) { }
     }
 }

@@ -1,18 +1,20 @@
 ﻿using System;
 
-namespace SpaceModel
+namespace Assets.SpaceModel
 {
     /// <summary>
     /// Общий класс игровых объектов.
     /// </summary>
-    /// <typeparam name="Vector">Тип данных, отвечающий за положение в пространстве.
-    /// <br/>Это может быть Vector2 или Vector3 в Unity. А может быть Vec3 в Unigine, к примеру.</typeparam>
-    public abstract class SpaceObject<Vector>
+    public abstract class SpaceObject
     {
-        public SpaceObject(Vector direction, Vector position)
+        /// <summary>
+        /// Тип этого объекта.
+        /// </summary>
+        public readonly SpaceObjectType type;
+
+        public SpaceObject(SpaceObjectType type)
         {
-            this.direction = direction;
-            this.position = position;
+            this.type = type;
         }
 
         #region Изменение свойств.
@@ -95,17 +97,5 @@ namespace SpaceModel
 
         #endregion Очки жизни.
 
-        #region Положение в пространстве.
-
-        /// <summary>
-        /// Направление полета.
-        /// </summary>
-        protected Vector direction;
-        /// <summary>
-        /// Местоположение в пространстве.
-        /// </summary>
-        protected Vector position;
-
-        #endregion Положение в пространстве.
     }
 }

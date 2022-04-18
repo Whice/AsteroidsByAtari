@@ -1,9 +1,8 @@
-﻿using System;
-
-namespace SpaceModel.DangerSpaceObjects
+﻿
+namespace Assets.SpaceModel.DangerSpaceObjects
 {
-    internal class BigAsteroid<Vector>:SpaceObject<Vector>
+    internal class BigAsteroid : SpaceObject
     {
-        public BigAsteroid(Vector direction, Vector position) : base(direction, position) { }
+        public BigAsteroid() : base(SpaceObjectType.bigAsteroid) { }
     }
 }
