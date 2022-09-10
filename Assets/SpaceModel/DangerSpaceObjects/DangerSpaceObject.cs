@@ -4,7 +4,7 @@ namespace Assets.SpaceModel.DangerSpaceObjects
 {
     public class DangerSpaceObject:SpaceObject
     {
-        public DangerSpaceObject(SpaceObjectType type) : base(type) { }
+        public DangerSpaceObject(SpaceObjectType type, IModelLogger logger) : base(type, logger) { }
 
         public override Boolean CollideWithObject(SpaceObject spaceObject)
         {

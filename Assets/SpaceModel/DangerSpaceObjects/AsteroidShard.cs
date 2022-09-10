@@ -2,7 +2,7 @@
 {
     internal class AsteroidShard : DangerSpaceObject
     {
-        public AsteroidShard() : base(SpaceObjectType.asteroidShard) { }
+        public AsteroidShard(IModelLogger logger) : base(SpaceObjectType.asteroidShard, logger) { }
 
     }
 }

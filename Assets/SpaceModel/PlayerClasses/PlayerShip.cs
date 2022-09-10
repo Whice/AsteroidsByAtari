@@ -9,24 +9,7 @@ namespace Assets.SpaceModel.PlayerClasses
     /// </summary>
     public class PlayerShip : SpaceObject
     {
-        #region Singleton
-
-        private PlayerShip() :base(SpaceObjectType.player) { }
-        private static PlayerShip instancePrivate = null;
-        public static PlayerShip instance
-        {
-            get
-            {
-                if (instancePrivate == null)
-                {
-                    instancePrivate = new PlayerShip();
-                }
-
-                return instancePrivate;
-            }
-        }
-
-        #endregion Singleton
+        public PlayerShip(IModelLogger logger) :base(SpaceObjectType.player, logger) { }
 
         /// <summary>
         /// Счет игрока.

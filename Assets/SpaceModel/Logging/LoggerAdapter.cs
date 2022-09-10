@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Text;
 
-namespace Assets.SpaceModel.Extensions
+namespace Assets.SpaceModel
 {
     /// <summary>
     /// Переходник (прослойка), через который модель может передавать 
     /// логи (сообщения) любому движку.
     /// </summary>
-    public class LoggerAdapter
+    public class LoggerAdapter : IModelLogger
     {
         #region Message methods delegates
 
@@ -29,28 +29,52 @@ namespace Assets.SpaceModel.Extensions
         #region Set deleates
 
         /// <summary>
-        /// Установить логеру метод для печати сообщения.
+        /// Добавить логеру метод для печати сообщения.
         /// </summary>
         /// <param name="onLogMessage">Метод для печати сообщения.</param>
-        public void SetLogMessageMethod(Action<String> onLogMessage)
+        public void AddLogMessageMethod(Action<String> onLogMessage)
         {
-            this.onLogMessage = onLogMessage;
+            this.onLogMessage += onLogMessage;
         }
         /// <summary>
-        /// Установить логеру метод для печати предупреждения
+        /// Удалить логеру метод для печати сообщения.
+        /// </summary>
+        /// <param name="onLogMessage">Метод для печати сообщения.</param>
+        public void RemoveLogMessageMethod(Action<String> onLogMessage)
+        {
+            this.onLogMessage -= onLogMessage;
+        }
+        /// <summary>
+        /// Добавить логеру метод для печати предупреждения
         /// </summary>
         /// <param name="onWarningMessage"> Метод для печати предупреждения.</param>
-        public void SetWarningMessageMethod(Action<String> onWarningMessage)
+        public void AddWarningMessageMethod(Action<String> onWarningMessage)
         {
-            this.onWarningMessage = onWarningMessage;
+            this.onWarningMessage += onWarningMessage;
         }
         /// <summary>
-        /// Установить логеру метод для печати ошибки.
+        /// Удалить логеру метод для печати предупреждения
+        /// </summary>
+        /// <param name="onWarningMessage"> Метод для печати предупреждения.</param>
+        public void RemoveWarningMessageMethod(Action<String> onWarningMessage)
+        {
+            this.onWarningMessage -= onWarningMessage;
+        }
+        /// <summary>
+        /// Добавить логеру метод для печати ошибки.
         /// </summary>
         /// <param name="onErrorMessage">Метод для печати ошибки.</param>
-        public void SetErrorMessageMethod(Action<String> onErrorMessage)
+        public void AddErrorMessageMethod(Action<String> onErrorMessage)
         {
-            this.onErrorMessage = onErrorMessage;
+            this.onErrorMessage += onErrorMessage;
+        }
+        /// <summary>
+        /// Удалить логеру метод для печати ошибки.
+        /// </summary>
+        /// <param name="onErrorMessage">Метод для печати ошибки.</param>
+        public void RemoveErrorMessageMethod(Action<String> onErrorMessage)
+        {
+            this.onErrorMessage -= onErrorMessage;
         }
 
         #endregion Set deleates
@@ -66,8 +90,8 @@ namespace Assets.SpaceModel.Extensions
             StringBuilder sb = new StringBuilder();
             foreach (object obj in objs)
             {
-                sb.Append(obj.ToString());  
-                sb.Append(" ");  
+                sb.Append(obj.ToString());
+                sb.Append(" ");
             }
             return sb.ToString();
         }

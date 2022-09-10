@@ -5,15 +5,17 @@ namespace Assets.SpaceModel
     /// <summary>
     /// Общий класс игровых объектов.
     /// </summary>
-    public abstract class SpaceObject : ModelLogger
+    public abstract class SpaceObject
     {
         /// <summary>
         /// Тип этого объекта.
         /// </summary>
         public readonly SpaceObjectType type;
 
-        public SpaceObject(SpaceObjectType type)
+        protected IModelLogger logger;
+        public SpaceObject(SpaceObjectType type, IModelLogger logger)
         {
+            this.logger = logger;
             this.type = type;
         }
 

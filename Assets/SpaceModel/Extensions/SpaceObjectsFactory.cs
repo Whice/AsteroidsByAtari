@@ -6,8 +6,19 @@ namespace Assets.SpaceModel.Extensions
     /// <summary>
     /// Фабрика для создания космических объектов.
     /// </summary>
-    public class SpaceObjectsFactory : ModelLogger
+    public class SpaceObjectsFactory
     {
+        public SpaceObjectsFactory(IModelLogger logger)
+        {
+            this.logger = logger;
+            this.player = new PlayerShip(logger);
+        }
+        private IModelLogger logger;
+        /// <summary>
+        /// Класс игрока создается сразу с фабрикой, чтобы был только один.
+        /// Аля синглтон, но не он, мало ли что.
+        /// </summary>
+        private PlayerShip player;
         /// <summary>
         /// Создать космический объект по типу.
         /// </summary>
@@ -17,17 +28,17 @@ namespace Assets.SpaceModel.Extensions
         {
             switch (type)
             {
-                case SpaceObjectType.nlo: return new NLO();
-                case SpaceObjectType.asteroidShard: return new AsteroidShard();
-                case SpaceObjectType.bigAsteroid: return new BigAsteroid();
+                case SpaceObjectType.nlo: return new NLO(this.logger);
+                case SpaceObjectType.asteroidShard: return new AsteroidShard(this.logger);
+                case SpaceObjectType.bigAsteroid: return new BigAsteroid(this.logger);
 
-                case SpaceObjectType.player: return PlayerShip.instance;
-                case SpaceObjectType.laser: return new Laser(PlayerShip.instance);
-                case SpaceObjectType.simpleBullet: return new Bullet(PlayerShip.instance);
+                case SpaceObjectType.player: return this.player;
+                case SpaceObjectType.laser: return new Laser(this.player, this.logger);
+                case SpaceObjectType.simpleBullet: return new Bullet(this.player, this.logger);
 
                 default:
                     {
-                        ErrorMessage("In method " + nameof(CreateSpaceObjects) 
+                        logger.ErrorMessage("In method " + nameof(CreateSpaceObjects) 
                             + " was provided invalid " + nameof(SpaceObjectType) + "!");
                         return null;
                     }

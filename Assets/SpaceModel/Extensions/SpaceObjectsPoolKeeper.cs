@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Assets.SpaceModel.Extensions
+namespace Assets.SpaceModel
 {
     /// <summary>
     /// Хранитель пулов объектов, которые много раз пересоздаются.
     /// </summary>
     public class SpaceObjectsPoolKeeper
     {
-        public SpaceObjectsPoolKeeper()
+        private IModelLogger logger;
+        public SpaceObjectsPoolKeeper(IModelLogger logger)
         {
+            this.logger = logger;
+            this.factory = new SpaceObjectsFactory(logger);
+
             //Создать сразу по 10
             SpaceObjectType type = SpaceObjectType.end;
             Int32 endTypes = (Int32)type;
@@ -29,7 +33,7 @@ namespace Assets.SpaceModel.Extensions
         /// <summary>
         /// Фабрика для создания космических объектов.
         /// </summary>
-        private SpaceObjectsFactory factory = new SpaceObjectsFactory();
+        private SpaceObjectsFactory factory;
         /// <summary>
         /// Словарь стеков объектов.
         /// В словаре каждый стек - пул объектов одного типа.
@@ -66,6 +70,10 @@ namespace Assets.SpaceModel.Extensions
 
         #region Внешние методы.
 
+        /// <summary>
+        /// Выданные объекты, которые могут иметь только один экземляр.
+        /// </summary>
+        private HashSet<SpaceObjectType> issuedSingleInstanceObjects = new HashSet<SpaceObjectType>();
         /// <summary>
         /// Добавить в пул объект.
         /// </summary>

@@ -6,7 +6,7 @@
         /// 
         /// </summary>
         /// <param name="player">Инфо об игроке.</param>
-        public Laser(PlayerShip player) : base(SpaceObjectType.laser, player)
+        public Laser(PlayerShip player, IModelLogger logger) : base(SpaceObjectType.laser, player, logger)
         { }
     }
 }

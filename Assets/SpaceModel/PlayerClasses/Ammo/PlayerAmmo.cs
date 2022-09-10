@@ -13,7 +13,7 @@ namespace Assets.SpaceModel.PlayerClasses
         /// </summary>
         /// <param name="type"></param>
         /// <param name="player">Инфо об игроке.</param>
-        public PlayerAmmo(SpaceObjectType type, PlayerShip player) : base(type) 
+        public PlayerAmmo(SpaceObjectType type, PlayerShip player, IModelLogger logger) : base(type, logger) 
         {
             this.player = player;
         }

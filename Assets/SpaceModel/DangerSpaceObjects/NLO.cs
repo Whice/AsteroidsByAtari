@@ -5,7 +5,7 @@
     /// </summary>
     public class NLO : DangerSpaceObject
     {
-        public NLO() : base(SpaceObjectType.nlo)
+        public NLO(IModelLogger logger) : base(SpaceObjectType.nlo, logger)
         { }
     }
 }

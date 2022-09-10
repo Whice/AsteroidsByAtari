@@ -4,7 +4,7 @@ namespace Assets.SpaceModel.DangerSpaceObjects
 {
     internal class BigAsteroid : DangerSpaceObject
     {
-        public BigAsteroid() : base(SpaceObjectType.bigAsteroid) { }
+        public BigAsteroid(IModelLogger logger) : base(SpaceObjectType.bigAsteroid, logger) { }
 
         public override Boolean CollideWithObject(SpaceObject spaceObject)
         {
