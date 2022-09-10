@@ -8,10 +8,7 @@ namespace Assets.SpaceModel.Extensions
     /// </summary>
     public class SpaceObjectsPoolKeeper
     {
-
-        #region Singleton
-
-        private  SpaceObjectsPoolKeeper()
+        public SpaceObjectsPoolKeeper()
         {
             //Создать сразу по 10
             SpaceObjectType type = SpaceObjectType.end;
@@ -26,21 +23,6 @@ namespace Assets.SpaceModel.Extensions
                 }
             }
         }
-        private static SpaceObjectsPoolKeeper instancePrivate = null;
-        public static SpaceObjectsPoolKeeper instance
-        {
-            get
-            {
-                if (instancePrivate == null)
-                {
-                    instancePrivate = new SpaceObjectsPoolKeeper();
-                }
-
-                return instancePrivate;
-            }
-        }
-
-        #endregion Singleton
 
         #region Данные.
 

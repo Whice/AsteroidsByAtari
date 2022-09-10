@@ -9,25 +9,6 @@ namespace Assets.SpaceModel.Extensions
     /// </summary>
     public class LoggerAdapter
     {
-        #region Singleton
-
-        private LoggerAdapter() { }
-        private static LoggerAdapter instancePrivate = null;
-        public static LoggerAdapter instance
-        {
-            get
-            {
-                if (instancePrivate == null)
-                {
-                    instancePrivate = new LoggerAdapter();
-                }
-
-                return instancePrivate;
-            }
-        }
-
-        #endregion Singleton
-
         #region Message methods delegates
 
         /// <summary>
