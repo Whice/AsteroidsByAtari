@@ -19,5 +19,10 @@ namespace Assets.SpaceModel.DangerSpaceObjects
 
             return result;
         }
+
+        public override int GetScore()
+        {
+            return 3;
+        }
     }
 }

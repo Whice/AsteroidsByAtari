@@ -34,15 +34,16 @@ namespace Assets.SpaceModel.Extensions
         /// <returns></returns>
         public static Boolean IsDangerObjectType(this SpaceObjectType type)
         {
-            switch (type)
+            Int32 intType = (Int32)type;
+            switch (intType)
             {
-                case SpaceObjectType.nlo: return true;
-                case SpaceObjectType.player: return false;
-                case SpaceObjectType.laser: return false;
+                case (Int32)SpaceObjectType.nlo: return true;
+                case (Int32)SpaceObjectType.player: return false;
+                case (Int32)SpaceObjectType.laser: return false;
 
-                case SpaceObjectType.simpleBullet: return false;
-                case SpaceObjectType.bigAsteroid: return true;
-                case SpaceObjectType.asteroidShard: return true;
+                case (Int32)SpaceObjectType.simpleBullet: return false;
+                case (Int32)SpaceObjectType.bigAsteroid: return true;
+                case (Int32)SpaceObjectType.asteroidShard: return true;
 
                 default: return false;
             }

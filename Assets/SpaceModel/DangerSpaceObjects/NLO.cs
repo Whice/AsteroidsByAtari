@@ -7,5 +7,10 @@
     {
         public NLO(IModelLogger logger) : base(SpaceObjectType.nlo, logger)
         { }
+
+        public override int GetScore()
+        {
+            return 5;
+        }
     }
 }
