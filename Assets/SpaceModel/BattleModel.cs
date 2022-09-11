@@ -1,9 +1,13 @@
 ﻿using Assets.SpaceModel.DangerSpaceObjects;
 using Assets.SpaceModel.Extensions;
 using System;
+using System.Collections.Generic;
 
 namespace Assets.SpaceModel
 {
+    /// <summary>
+    /// Модель боя в игре.
+    /// </summary>
     public class BattleModel
     {
         private IModelLogger logger;
@@ -26,6 +30,8 @@ namespace Assets.SpaceModel
         {
         }
 
+
+        private List<SpaceObject> activeObects;
         /// <summary>
         /// Выпонить действия при уничтожении игрового объекта.
         /// </summary>
@@ -51,6 +57,18 @@ namespace Assets.SpaceModel
         }
 
         /// <summary>
+        /// Обновить внутренние данные.
+        /// </summary>
+        /// <param name="timeAfterLastTick">Время проедшее после последнего игрового тика.</param>
+        public void Update(DateTime timeAfterLastTick)
+        { 
+            for (int i = 0; i < this.activeObects.Count; i++)
+            {
+                this.activeObects[i].Update(timeAfterLastTick);
+            }
+        }
+
+        /// <summary>
         /// Начать игру.
         /// Во время старта игры происходит инициализация всех внутренних классов.
         /// </summary>
@@ -59,6 +77,9 @@ namespace Assets.SpaceModel
             this.logger = new LoggerAdapter();
             this.poolKeeper = new SpaceObjectsPoolKeeper(this.logger);
             this.battleInfo = new BattleInfo();
+            this.activeObects = new List<SpaceObject>();
+
+            this.onStartGame?.Invoke();
         }
         public event Action onStartGame;
         public event Action<BattleInfo> onEndGame;
