@@ -73,7 +73,7 @@ namespace Assets.SpaceModel
         /// Обновить внутренние данные.
         /// </summary>
         /// <param name="timeAfterLastTick">Время проедшее после последнего игрового тика.</param>
-        public virtual void Update(DateTime timeAfterLastTick) { }
+        public virtual void Update(Single timeAfterLastTick) { }
 
         #endregion Изменение свойств.
 

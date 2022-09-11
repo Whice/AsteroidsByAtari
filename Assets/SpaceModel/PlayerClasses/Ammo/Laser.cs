@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity;
 
 namespace Assets.SpaceModel.PlayerClasses
 {
@@ -73,9 +74,11 @@ namespace Assets.SpaceModel.PlayerClasses
         }
 
 
-        public override void Update(DateTime timeAfterLastTick)
+        public override void Update(Single timeAfterLastTick)
         {
             base.Update(timeAfterLastTick);
+
+            this.leftTimeAfterLastIncreaseChargeCount += timeAfterLastTick;
 
             //Пополнить количество снарядов, если требуется.
             while (this.leftTimeAfterLastIncreaseChargeCount > TIME_FOR_INCREASE_CHARGE_COUNT)
@@ -83,8 +86,6 @@ namespace Assets.SpaceModel.PlayerClasses
                 if (this.chargeCountPrivate < MAX_CHARGE_COUNT)
                 {
                     this.leftTimeAfterLastIncreaseChargeCount -= TIME_FOR_INCREASE_CHARGE_COUNT;
-                    if (this.leftTimeAfterLastIncreaseChargeCount < 0)
-                        this.leftTimeAfterLastIncreaseChargeCount = 0;
 
                     IncreaseChargeCount();
                 }
