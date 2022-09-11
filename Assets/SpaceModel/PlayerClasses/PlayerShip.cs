@@ -7,7 +7,7 @@ namespace Assets.SpaceModel.PlayerClasses
     /// <br/>Обозван кораблем игрока, т.к. в основном будет
     /// восприниматься именно в качестве космического корабля.
     /// </summary>
-    public class PlayerShip : SpaceObject
+    internal class PlayerShip : SpaceObject
     {
         public PlayerShip(IModelLogger logger) :base(SpaceObjectType.player, logger) { }
 

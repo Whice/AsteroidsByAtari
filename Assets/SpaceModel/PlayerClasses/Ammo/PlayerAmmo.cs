@@ -2,7 +2,10 @@
 
 namespace Assets.SpaceModel.PlayerClasses
 {
-    public class PlayerAmmo:SpaceObject
+    /// <summary>
+    /// Общий класс оружия игрока.
+    /// </summary>
+    internal abstract class PlayerAmmo:SpaceObject
     {
         /// <summary>
         /// Инфо об игроке.

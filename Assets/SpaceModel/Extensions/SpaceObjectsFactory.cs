@@ -1,12 +1,12 @@
 ﻿using Assets.SpaceModel.DangerSpaceObjects;
 using Assets.SpaceModel.PlayerClasses;
 
-namespace Assets.SpaceModel.Extensions
+namespace Assets.SpaceModel
 {
     /// <summary>
     /// Фабрика для создания космических объектов.
     /// </summary>
-    public class SpaceObjectsFactory
+    internal class SpaceObjectsFactory
     {
         public SpaceObjectsFactory(IModelLogger logger)
         {

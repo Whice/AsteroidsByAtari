@@ -1,6 +1,9 @@
 ﻿namespace Assets.SpaceModel.PlayerClasses
 {
-    public class Bullet : PlayerAmmo
+    /// <summary>
+    /// Пуля игрока.
+    /// </summary>
+    internal class Bullet : PlayerAmmo
     {
         /// <summary>
         /// 

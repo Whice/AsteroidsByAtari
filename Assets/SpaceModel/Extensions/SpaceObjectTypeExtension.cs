@@ -27,5 +27,25 @@ namespace Assets.SpaceModel.Extensions
                 default: return false;
             }
         }
+        /// <summary>
+        /// Опасен ли объект этого типа игроку.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static Boolean IsDangerObjectType(this SpaceObjectType type)
+        {
+            switch (type)
+            {
+                case SpaceObjectType.nlo: return true;
+                case SpaceObjectType.player: return false;
+                case SpaceObjectType.laser: return false;
+
+                case SpaceObjectType.simpleBullet: return false;
+                case SpaceObjectType.bigAsteroid: return true;
+                case SpaceObjectType.asteroidShard: return true;
+
+                default: return false;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.SpaceModel.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace Assets.SpaceModel
@@ -6,7 +7,7 @@ namespace Assets.SpaceModel
     /// <summary>
     /// Хранитель пулов объектов, которые много раз пересоздаются.
     /// </summary>
-    public class SpaceObjectsPoolKeeper
+    internal class SpaceObjectsPoolKeeper
     {
         private IModelLogger logger;
         public SpaceObjectsPoolKeeper(IModelLogger logger)
@@ -89,14 +90,18 @@ namespace Assets.SpaceModel
         /// <returns></returns>
         public SpaceObject Pop(SpaceObjectType type)
         {
+            SpaceObject objectForPop=null;
             if (this.pools[type].Count > 0)
             {
-                return this.pools[type].Pop();
+                objectForPop= this.pools[type].Pop();
             }
             else
             {
-                return CreateSpaceObjects(type);
+                objectForPop = CreateSpaceObjects(type);
             }
+
+            objectForPop.OnDestroed += Push;
+            return objectForPop;
         }
 
         #endregion Внешние методы.

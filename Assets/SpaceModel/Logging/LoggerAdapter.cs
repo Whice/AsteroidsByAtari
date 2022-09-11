@@ -7,7 +7,7 @@ namespace Assets.SpaceModel
     /// Переходник (прослойка), через который модель может передавать 
     /// логи (сообщения) любому движку.
     /// </summary>
-    public class LoggerAdapter : IModelLogger
+    internal class LoggerAdapter : IModelLogger
     {
         #region Message methods delegates
 

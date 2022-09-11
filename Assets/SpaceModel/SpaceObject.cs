@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.SpaceModel.Extensions;
+using System;
 
 namespace Assets.SpaceModel
 {
@@ -35,7 +36,8 @@ namespace Assets.SpaceModel
                     {
                         if (this.hp <= 0)
                         {
-                            this.OnDestroed?.Invoke();
+                            this.OnDestroed?.Invoke(this);
+                            UnsubscribeFromAllListenersForOnDestroy();
                         }
                         break;
                     }
@@ -67,11 +69,28 @@ namespace Assets.SpaceModel
 #pragma warning restore CS8604
             }
         }
+        /// <summary>
+        /// Обновить внутренние данные.
+        /// </summary>
+        /// <param name="timeAfterLastTick">Время проедшее после последнего игрового тика.</param>
+        public virtual void Update(DateTime timeAfterLastTick) { }
 
         #endregion Изменение свойств.
 
         #region Столкновение.
 
+        /// <summary>
+        /// Опасен ли тип этого объекта объекту указанного типа.
+        /// <br/>Если тип этого объекта указан как союзник игрока (пуля, к примеру),
+        /// а второй тип, как его противник (НЛО, к примеру), то да, они опасны друг другу
+        /// и ответ будет положительным, иначе отрицательным.
+        /// </summary>
+        /// <param name="type">Тип другого объекта.</param>
+        /// <returns></returns>
+        protected Boolean IsDangerObjectWith(SpaceObjectType type)
+        {
+            return this.type.IsDangerObjectType() != type.IsDangerObjectType();
+        }
         /// <summary>
         /// Столкнуть этот объект с указаным объектом.
         /// </summary>
@@ -85,6 +104,15 @@ namespace Assets.SpaceModel
 
         #region Очки жизни.
 
+        /// <summary>
+        /// Заставить всех подписчиков отписаться от события уничтожения,
+        /// если подписчики есть.
+        /// </summary>
+        public void UnsubscribeFromAllListenersForOnDestroy()
+        {
+            if(this.OnDestroed!=null)
+                this.OnDestroed = null;
+        }
         /// <summary>
         /// Количество очков жизни.
         /// </summary>
@@ -103,12 +131,16 @@ namespace Assets.SpaceModel
                 SetValueProperty(nameof(this.hp), ref this.hpPrivate, value);
             }
         }
+        public void Destroy()
+        {
+            this.hp = 0;
+        }
 
         /// <summary>
         /// Событие, которое происходит, когда объект уничтожается.
         /// <br/>Объект уничтожется, когда его <see cref="hp"/> становиться меньше или равным 0.
         /// </summary>
-        public event Action? OnDestroed;
+        public event Action<SpaceObject> OnDestroed;
 
         #endregion Очки жизни.
     }
