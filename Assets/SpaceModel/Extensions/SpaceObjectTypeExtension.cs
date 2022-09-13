@@ -18,7 +18,7 @@ namespace Assets.SpaceModel.Extensions
             {
                 case SpaceObjectType.nlo: return false;
                 case SpaceObjectType.player: return false;
-                case SpaceObjectType.laser: return false;
+                case SpaceObjectType.laser: return true;
 
                 case SpaceObjectType.simpleBullet: return true;
                 case SpaceObjectType.bigAsteroid: return true;
@@ -37,11 +37,11 @@ namespace Assets.SpaceModel.Extensions
             Int32 intType = (Int32)type;
             switch (intType)
             {
-                case (Int32)SpaceObjectType.nlo: return true;
+                case (Int32)SpaceObjectType.simpleBullet: return false;
                 case (Int32)SpaceObjectType.player: return false;
                 case (Int32)SpaceObjectType.laser: return false;
 
-                case (Int32)SpaceObjectType.simpleBullet: return false;
+                case (Int32)SpaceObjectType.nlo: return true;
                 case (Int32)SpaceObjectType.bigAsteroid: return true;
                 case (Int32)SpaceObjectType.asteroidShard: return true;
 

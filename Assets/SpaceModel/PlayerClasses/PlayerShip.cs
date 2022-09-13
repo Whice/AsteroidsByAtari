@@ -9,30 +9,10 @@ namespace Assets.SpaceModel.PlayerClasses
     /// </summary>
     internal class PlayerShip : SpaceObject
     {
-        public PlayerShip(IModelLogger logger) :base(SpaceObjectType.player, logger) { }
-
-        /// <summary>
-        /// Счет игрока.
-        /// </summary>
-        public Int64 scorePrivate = 0;
-        /// <summary>
-        /// Счет игрока. Он может только увеличиваться.
-        /// </summary>
-        public Int64 score
+        public PlayerShip(IModelLogger logger) :base(SpaceObjectType.player, logger)
         {
-            get
-            {
-                return this.scorePrivate;
-            }
-            set
-            {
-                if (value > this.scorePrivate)
-                {
-                    this.scorePrivate = value;
-                }
-            }
+            this.chargeCountPrivate = MAX_CHARGE_COUNT;
         }
-
 
         public override Boolean CollideWithObject(SpaceObject spaceObject)
         {
@@ -51,5 +31,118 @@ namespace Assets.SpaceModel.PlayerClasses
 
             return false;
         }
+
+
+        #region Выстрел лазером.
+
+
+        #region Количество зарядов лазером.
+
+        /// <summary>
+        /// Максимальное количество зарядов.
+        /// </summary>
+        private const Int32 MAX_CHARGE_COUNT = 3;
+        /// <summary>
+        /// Количество зарядов.
+        /// </summary>
+        private Int32 chargeCountPrivate;
+        /// <summary>
+        /// Количество зарядов.
+        /// </summary>
+        public Int32 chargeCount
+        {
+            get => chargeCountPrivate;
+        }
+        /// <summary>
+        /// Нужно пополнение количества зарядов.
+        /// </summary>
+        public Boolean isNeedInsreasingChargeCount
+        {
+            get => this.chargeCountPrivate < MAX_CHARGE_COUNT;
+        }
+
+        /// <summary>
+        /// Пополнение количества зарядов.
+        /// Пополнение не происходит, если достигнут максимум.
+        /// </summary>
+        private void IncreaseChargeCount()
+        {
+            if (this.isNeedInsreasingChargeCount)
+            {
+                ++this.chargeCountPrivate;
+            }
+        }
+        /// <summary>
+        /// Попытаться сделать выстрел лазером.
+        /// </summary>
+        /// <returns>true, если зарядов хватило и выстрел сделать удалось.</returns>
+        public Boolean TryLaserShot()
+        {
+            if (this.chargeCountPrivate > 0)
+            {
+                --this.chargeCountPrivate;
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Время для обновления одного заряда лазера.
+        /// </summary>
+        private const Single TIME_FOR_INCREASE_CHARGE_COUNT = 5F;
+        /// <summary>
+        /// Прошло времени с послежнего пополнения зарядов.
+        /// </summary>
+        private Single leftTimeAfterLastIncreaseChargeCount = 0;
+
+        #endregion Количество зарядов лазером.
+
+        #region Стрельба пулями.
+
+        /// <summary>
+        /// Время для обновления одного выстрела пулей.
+        /// </summary>
+        private const Single TIME_FOR_NEXT_BULLET_SHOOT = 0.5f;
+        /// <summary>
+        /// Прошло времени с послежнего пополнения зарядов.
+        /// </summary>
+        private Single leftTimeAfterLastShoot = 0;
+        /// <summary>
+        /// Попытаться сделать выстрел пулей.
+        /// </summary>
+        /// <returns>true, если время перезарядки уже прошло и выстрел сделать удалось.</returns>
+        public Boolean TryBulletShot()
+        {
+            if (this.leftTimeAfterLastShoot > TIME_FOR_NEXT_BULLET_SHOOT)
+            {
+                this.leftTimeAfterLastShoot = 0;
+                return true;
+            }
+            return false;
+        }
+
+        #endregion Стрельба пулями.
+
+        public override void Update(Single timeAfterLastTick)
+        {
+            base.Update(timeAfterLastTick);
+
+            this.leftTimeAfterLastIncreaseChargeCount += timeAfterLastTick;
+            this.leftTimeAfterLastShoot += timeAfterLastTick;
+
+            //Пополнить количество снарядов, если требуется.
+            while (this.leftTimeAfterLastIncreaseChargeCount > TIME_FOR_INCREASE_CHARGE_COUNT)
+            {
+                if (this.chargeCountPrivate < MAX_CHARGE_COUNT)
+                {
+                    this.leftTimeAfterLastIncreaseChargeCount -= TIME_FOR_INCREASE_CHARGE_COUNT;
+
+                    IncreaseChargeCount();
+                }
+            }
+        }
+
+        #endregion Выстрел лазером.
     }
 }
