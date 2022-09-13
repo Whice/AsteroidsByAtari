@@ -12,7 +12,7 @@ namespace Assets.SpaceModel.PlayerClasses
         /// 
         /// </summary>
         /// <param name="player">Инфо об игроке.</param>
-        public Laser(PlayerShip player, IModelLogger logger) : base(SpaceObjectType.laser, player, logger)
+        public Laser(PlayerShip player, IModelLogger logger) : base(SpaceObjectType.laser, logger)
         {
         }
     }

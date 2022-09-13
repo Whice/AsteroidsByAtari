@@ -4,7 +4,9 @@ namespace Assets.SpaceModel.DangerSpaceObjects
 {
     internal class BigAsteroid : DangerSpaceObject
     {
-        public BigAsteroid(IModelLogger logger) : base(SpaceObjectType.bigAsteroid, logger) { }
+        public BigAsteroid(IModelLogger logger) : base(SpaceObjectType.bigAsteroid, logger) 
+        {
+        }
 
         public override Boolean CollideWithObject(SpaceObject spaceObject)
         {
@@ -12,9 +14,15 @@ namespace Assets.SpaceModel.DangerSpaceObjects
 
             //При попадании пули в большой астероид,
             //он должен расколоться на маленькие.
-            if(spaceObject.type == SpaceObjectType.simpleBullet)
+            if ((Int32)spaceObject.type == (Int32)SpaceObjectType.simpleBullet)
             {
-                result = true;
+                return true;
+            }
+            //При попадании лазером просто уничтожить большой астероид.
+            else if ((Int32)spaceObject.type == (Int32)SpaceObjectType.laser)
+            {
+                this.hp = 0;
+                return false;
             }
 
             return result;

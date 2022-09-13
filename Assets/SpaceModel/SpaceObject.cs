@@ -98,7 +98,16 @@ namespace Assets.SpaceModel
         /// <returns>true, если надо совершить какое-то дополнительное действие
         /// в зависимости от типа одного из объектов.
         /// <br/>Какие именно действия будут совершаться, будут решать правила игры.</returns>
-        public abstract Boolean CollideWithObject(SpaceObject spaceObject);
+        public virtual Boolean CollideWithObject(SpaceObject spaceObject)
+        {
+            SpaceObjectType type = spaceObject.type;
+            if (IsDangerObjectWith(type))
+            {
+                --this.hp;
+            }
+
+            return false;
+        }
 
         #endregion Столкновение.
 
@@ -110,7 +119,7 @@ namespace Assets.SpaceModel
         /// </summary>
         public void UnsubscribeFromAllListenersForOnDestroy()
         {
-            if(this.OnDestroed!=null)
+            if (this.OnDestroed != null)
                 this.OnDestroed = null;
         }
         /// <summary>
@@ -143,5 +152,6 @@ namespace Assets.SpaceModel
         public event Action<SpaceObject> OnDestroed;
 
         #endregion Очки жизни.
+
     }
 }
