@@ -69,10 +69,15 @@ namespace View
         {
             this.battleModel.onCreatedSpaceObject += OnCreateSpaceObject;
             this.battleModel.OnDestroedActiveObject += OnDestoySpaceObject;
+            this.battleModel.onEndedGame += OnEndGame;
             this.battleModel.StartGame();
             this.isGameStarted = true;
         }
 
+        private void OnEndGame(BattleInfo info)
+        {
+
+        }
 
         private List<SpaceObjectView> activeSpaceObject = new List<SpaceObjectView>();
 

@@ -80,5 +80,15 @@ namespace View
             this.modelSpaceObjectPrivate = null;
             this.pool.PushSpaceObjectView(this);
         }
+
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            LogInfo(collision.gameObject.name);
+        }
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            LogInfo(collision.gameObject.name);
+        }
     }
 }
