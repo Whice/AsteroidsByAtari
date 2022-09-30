@@ -46,7 +46,7 @@ namespace Assets.SpaceModel
         /// <br/>Решил сделать список, т.к. будет часто выполняться обход всех
         /// активных объектов, а вот удаление намного реже.
         /// </summary>
-        private List<SpaceObject> activeObects;
+        private List<SpaceObject> activeObects = new List<SpaceObject>(100);
         /// <summary>
         /// Событие начала игры.
         /// </summary>
@@ -288,7 +288,6 @@ namespace Assets.SpaceModel
             this.logger = new LoggerAdapter();
             this.poolKeeper = new SpaceObjectsPoolKeeper(this.logger);
             this.battleInfo = new BattleInfo();
-            this.activeObects = new List<SpaceObject>();
 
             this.maxmumDangerousObjectsCountsPrivate = new DangerousObjectsCounts
             {

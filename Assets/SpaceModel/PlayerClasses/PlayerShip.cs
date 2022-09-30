@@ -129,17 +129,17 @@ namespace Assets.SpaceModel.PlayerClasses
         {
             base.Update(timeAfterLastTick);
 
-            this.leftTimeAfterLastIncreaseChargeCount += timeAfterLastTick;
             this.leftTimeAfterLastShoot += timeAfterLastTick;
 
-            //Пополнить количество снарядов, если требуется.
-            while (this.leftTimeAfterLastIncreaseChargeCount > TIME_FOR_INCREASE_CHARGE_COUNT)
+            if (this.chargeCountPrivate < MAX_CHARGE_COUNT)
             {
-                if (this.chargeCountPrivate < MAX_CHARGE_COUNT)
+                this.leftTimeAfterLastIncreaseChargeCount += timeAfterLastTick;
+                //Пополнить количество снарядов, если требуется.
+                while (this.leftTimeAfterLastIncreaseChargeCount > TIME_FOR_INCREASE_CHARGE_COUNT)
                 {
-                    this.leftTimeAfterLastIncreaseChargeCount -= TIME_FOR_INCREASE_CHARGE_COUNT;
-
                     IncreaseChargeCount();
+
+                    this.leftTimeAfterLastIncreaseChargeCount -= TIME_FOR_INCREASE_CHARGE_COUNT;
                 }
             }
         }

@@ -81,17 +81,21 @@ namespace Assets.SpaceModel
         /// <param name="spaceObject"></param>
         public void Push(SpaceObject spaceObject)
         {
+            if (!this.pools.ContainsKey(spaceObject.type))
+            {
+                this.pools.Add(spaceObject.type, new Stack<SpaceObject>());
+            }
             this.pools[spaceObject.type].Push(spaceObject);
         }
-        /// <summary>
-        /// Вытащить из пула объект заданного типа.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public SpaceObject Pop(SpaceObjectType type)
+            /// <summary>
+            /// Вытащить из пула объект заданного типа.
+            /// </summary>
+            /// <param name="type"></param>
+            /// <returns></returns>
+            public SpaceObject Pop(SpaceObjectType type)
         {
             SpaceObject objectForPop=null;
-            if (this.pools[type].Count > 0)
+            if (this.pools.ContainsKey(type) && this.pools[type].Count > 0)
             {
                 objectForPop= this.pools[type].Pop();
             }
