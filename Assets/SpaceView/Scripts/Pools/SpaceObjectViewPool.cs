@@ -26,7 +26,7 @@ namespace View
         /// </summary>
         /// <param name="typePrefab"></param>
         /// <returns></returns>
-        public SpaceObjectView GetSpaceObjectView(SpaceObject spaceObject)
+        public SpaceObjectView GetSpaceObjectView(SpaceObject spaceObject, in Borders.PositionAndDirection positionAndDirection)
         {
             SpaceObjectView soView = null;
             if (pool.Count > 0)
@@ -38,7 +38,7 @@ namespace View
                 soView = GameObject.Instantiate(this.templateObject);
             }
 
-            soView.Initialize(spaceObject);
+            soView.Initialize(spaceObject, positionAndDirection);
             soView.InitPool(this);
             soView.gameObject.SetActive(true);
             return soView;

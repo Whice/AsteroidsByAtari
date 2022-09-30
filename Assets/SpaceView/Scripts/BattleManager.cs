@@ -15,6 +15,16 @@ namespace View
         /// </summary>
         [SerializeField]
         private BattleView battleView = null;
+        /// <summary>
+        /// Место (родитель) , куда будут назначаться активные объекты.
+        /// </summary>
+        [SerializeField]
+        private Transform activeObjectPlaceInHierarchy = null;
+        /// <summary>
+        /// Границы боевого поля.
+        /// </summary>
+        [SerializeField]
+        private Borders battleFieldBorders = null;
         private void Awake()
         {
             if (!this.battleView.isInited)
@@ -35,7 +45,14 @@ namespace View
         private void OnCreateSpaceObject(SpaceObject sObject)
         {
             SpaceObjectViewPool pool = PoolsKeeper.instance.GetSpaceObjectViewPool();
-            this.activeSpaceObject.Add(pool.GetSpaceObjectView(sObject));
+            SpaceObjectView view = pool.GetSpaceObjectView
+                (
+                sObject,
+                this.battleFieldBorders.GetRandomPositionAndDirection()
+                );
+            this.activeSpaceObjects.Add(view);
+            if (view.transform.parent == null)
+                view.transform.SetParent(this.activeObjectPlaceInHierarchy, false);
         }
         /// <su/// <summary>
         /// Создать и нарисовать космический объект.
@@ -44,10 +61,10 @@ namespace View
         private void OnDestoySpaceObject(SpaceObject sObject)
         {
             SpaceObjectView soView = null;
-            for (int i = 0; i < this.activeSpaceObject.Count; i++)
+            for (int i = 0; i < this.activeSpaceObjects.Count; i++)
             {
-                if (this.activeSpaceObject[i].modelSpaceObject == sObject)
-                    soView = this.activeSpaceObject[i];
+                if (this.activeSpaceObjects[i].modelSpaceObject == sObject)
+                    soView = this.activeSpaceObjects[i];
             }
             if (soView == null)
             {
@@ -74,12 +91,20 @@ namespace View
             this.isGameStarted = true;
         }
 
+        /// <summary>
+        /// Выполнить окончание боя.
+        /// </summary>
+        /// <param name="info"></param>
         private void OnEndGame(BattleInfo info)
         {
-
+            this.isGameStarted = false;
+            for (Int32 i = 0; i < this.activeSpaceObjects.Count; i++)
+            {
+                this.activeSpaceObjects[i].DestroySpaceObject();
+            }
         }
 
-        private List<SpaceObjectView> activeSpaceObject = new List<SpaceObjectView>();
+        private List<SpaceObjectView> activeSpaceObjects = new List<SpaceObjectView>();
 
         private void Update()
         {
@@ -94,6 +119,7 @@ namespace View
             this.battleModel.onCreatedSpaceObject -= OnCreateSpaceObject;
             this.battleModel.OnDestroedActiveObject -= OnDestoySpaceObject;
             this.battleView.OnInited -= StartGame;
+            this.battleModel.onEndedGame -= OnEndGame;
         }
     }
 }

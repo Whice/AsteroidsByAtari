@@ -14,7 +14,7 @@ public class BattlePrefabPool
         this.provider = provider;
     }
 
-    private Dictionary<Int32, List<GameObject>> pool = new Dictionary<Int32, List<GameObject>>();
+    private Dictionary<Int32, Stack<GameObject>> pool = new Dictionary<Int32, Stack<GameObject>>();
     private Int32 GetLastIndex(List<GameObject> list)
     {
         return list.Count - 1;
@@ -31,14 +31,11 @@ public class BattlePrefabPool
         {
             if (this.pool[typePrefab].Count > 0)
             {
-                List<GameObject> prefabs = this.pool[typePrefab];
-                Int32 lastIndex = GetLastIndex(prefabs);
-                prefab = prefabs[lastIndex];
-                prefabs.RemoveAt(lastIndex);
+                prefab = this.pool[typePrefab].Pop();
             }
         }
-
-        prefab = this.provider.GetPrefabClone(typePrefab);
+        else
+            prefab = this.provider.GetPrefabClone(typePrefab);
 
         prefab.SetActive(true);
         return prefab;
@@ -51,6 +48,6 @@ public class BattlePrefabPool
     public void PushBattlePrefab(Int32 typePrefab, GameObject prefab)
     {
         prefab.SetActive(false);
-        this.pool[typePrefab].Add(prefab);
+        this.pool[typePrefab].Push(prefab);
     }
 }
