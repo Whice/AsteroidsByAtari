@@ -140,7 +140,14 @@ namespace Assets.SpaceModel
                 SetValueProperty(nameof(this.hp), ref this.hpPrivate, value);
             }
         }
-        public void Destroy()
+        /// <summary>
+        /// Установить очки жизни на максимум.
+        /// </summary>
+        public abstract void SetMaxHP();
+        /// <summary>
+        /// Разушить объект просто установив ему значение hp = 0.
+        /// </summary>
+        public virtual void Destroy()
         {
             this.hp = 0;
         }

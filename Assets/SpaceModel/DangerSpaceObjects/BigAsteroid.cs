@@ -5,7 +5,11 @@ namespace Assets.SpaceModel.DangerSpaceObjects
     internal class BigAsteroid : DangerSpaceObject
     {
         public BigAsteroid(IModelLogger logger) : base(SpaceObjectType.bigAsteroid, logger) 
+        {       
+        }
+        public override void SetMaxHP()
         {
+            this.hp = 2;
         }
 
         public override Boolean CollideWithObject(SpaceObject spaceObject)
@@ -30,7 +34,7 @@ namespace Assets.SpaceModel.DangerSpaceObjects
 
         public override int GetScore()
         {
-            return 3;
+            return this.isNeedGetScore ? 3 : 0;
         }
     }
 }

@@ -15,5 +15,9 @@ namespace Assets.SpaceModel.PlayerClasses
         public Laser(PlayerShip player, IModelLogger logger) : base(SpaceObjectType.laser, logger)
         {
         }
+        public override void SetMaxHP()
+        {
+            this.hp = 1;
+        }
     }
 }

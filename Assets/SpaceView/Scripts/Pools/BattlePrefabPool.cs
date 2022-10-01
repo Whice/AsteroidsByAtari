@@ -9,20 +9,20 @@ using UnityEngine;
 public class BattlePrefabPool
 {
     private BattlePrefabProvider provider;
-    public BattlePrefabPool(BattlePrefabProvider provider)
+
+    ///Место в hierarchy для неактивных объектов.
+    private Transform nonActiveObjectPlace ;
+    public BattlePrefabPool(BattlePrefabProvider provider, Transform nonActiveObjectPlace)
     {
         this.provider = provider;
+        this.nonActiveObjectPlace = nonActiveObjectPlace;
     }
 
     private Dictionary<Int32, Stack<GameObject>> pool = new Dictionary<Int32, Stack<GameObject>>();
-    private Int32 GetLastIndex(List<GameObject> list)
-    {
-        return list.Count - 1;
-    }
     /// <summary>
     /// Получить боевой объект.
     /// </summary>
-    /// <param name="typePrefab"></param>
+    /// <param name="typePrefab">Тип SpaceObjectType</param>
     /// <returns></returns>
     public GameObject GetBattlePrefab(Int32 typePrefab)
     {
@@ -34,7 +34,7 @@ public class BattlePrefabPool
                 prefab = this.pool[typePrefab].Pop();
             }
         }
-        else
+        if(prefab == null)
             prefab = this.provider.GetPrefabClone(typePrefab);
 
         prefab.SetActive(true);
@@ -48,6 +48,16 @@ public class BattlePrefabPool
     public void PushBattlePrefab(Int32 typePrefab, GameObject prefab)
     {
         prefab.SetActive(false);
-        this.pool[typePrefab].Push(prefab);
+        prefab.transform.SetParent(this.nonActiveObjectPlace, false);
+        if (this.pool.ContainsKey(typePrefab))
+        {
+            this.pool[typePrefab].Push(prefab);
+        }
+        else
+        {
+            Stack<GameObject> stack = new Stack<GameObject>();
+            stack.Push(prefab);
+            this.pool.Add(typePrefab, stack);
+        }
     }
 }

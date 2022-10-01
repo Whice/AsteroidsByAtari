@@ -1,4 +1,6 @@
-﻿namespace View
+﻿using UnityEngine;
+
+namespace View
 {
     /// <summary>
     /// Хранитель пуллов.
@@ -7,10 +9,12 @@
     {
         private BattlePrefabPool battlePrefabPool;
         private SpaceObjectViewPool spaceObjectViewPool;
-        public void Init(BattlePrefabProvider battlePrefabProvider, SpaceObjectView templateObject)
+        private SpaceObjectMovePool spaceObjectMovePool;
+        public void Init(BattlePrefabProvider battlePrefabProvider, SpaceObjectView templateObject, Borders battleFieldborders, Transform nonActiveObjectPlace)
         {
-            this.battlePrefabPool = new BattlePrefabPool(battlePrefabProvider);
+            this.battlePrefabPool = new BattlePrefabPool(battlePrefabProvider, nonActiveObjectPlace);
             this.spaceObjectViewPool = new SpaceObjectViewPool(templateObject);
+            this.spaceObjectMovePool = new SpaceObjectMovePool(battleFieldborders);
         }
         public BattlePrefabPool GetBattlePrefabPool()
         {
@@ -19,6 +23,10 @@
         public SpaceObjectViewPool GetSpaceObjectViewPool()
         {
             return this.spaceObjectViewPool;
+        }
+        public SpaceObjectMovePool GetSpaceObjectMovePool()
+        {
+            return this.spaceObjectMovePool;
         }
     }
 }

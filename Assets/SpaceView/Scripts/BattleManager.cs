@@ -20,11 +20,6 @@ namespace View
         /// </summary>
         [SerializeField]
         private Transform activeObjectPlaceInHierarchy = null;
-        /// <summary>
-        /// Границы боевого поля.
-        /// </summary>
-        [SerializeField]
-        private Borders battleFieldBorders = null;
         private void Awake()
         {
             if (!this.battleView.isInited)
@@ -48,7 +43,7 @@ namespace View
             SpaceObjectView view = pool.GetSpaceObjectView
                 (
                 sObject,
-                this.battleFieldBorders.GetRandomPositionAndDirection()
+                this.battleView.battleFieldBorders
                 );
             this.activeSpaceObjects.Add(view);
             if (view.transform.parent == null)
@@ -61,17 +56,23 @@ namespace View
         private void OnDestoySpaceObject(SpaceObject sObject)
         {
             SpaceObjectView soView = null;
+            int indexForRemove = -1;
             for (int i = 0; i < this.activeSpaceObjects.Count; i++)
             {
                 if (this.activeSpaceObjects[i].modelSpaceObject == sObject)
+                {
                     soView = this.activeSpaceObjects[i];
-            }
-            if (soView == null)
+                    indexForRemove = i;
+                    break;
+                }
+                }
+                if (soView == null || indexForRemove==-1)
             {
                 LogError("The specified SpaceObjectView is not found among the active objects!");
                 return;
             }
             soView.DestroySpaceObject();
+            this.activeSpaceObjects.RemoveAt(indexForRemove);
         }
 
 
@@ -104,13 +105,19 @@ namespace View
             }
         }
 
+        /// <summary>
+        /// Объекты участвующие в бою.
+        /// </summary>
         private List<SpaceObjectView> activeSpaceObjects = new List<SpaceObjectView>();
 
         private void Update()
         {
             if (this.isGameStarted)
             {
-                this.battleModel.Update(Time.deltaTime);
+                float delatTime = Time.deltaTime;
+                this.battleModel.Update(delatTime);
+                for (int i = 0; i < this.activeSpaceObjects.Count; i++)
+                    this.activeSpaceObjects[i].moveComponent.Move(delatTime);
             }
         }
 

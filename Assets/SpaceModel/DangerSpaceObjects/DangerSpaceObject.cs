@@ -5,6 +5,10 @@ namespace Assets.SpaceModel.DangerSpaceObjects
 {
     internal abstract class DangerSpaceObject : SpaceObject
     {
+        /// <summary>
+        /// Нужно ли выдать счет за уничтожение этого объекта.
+        /// </summary>
+        public Boolean isNeedGetScore;
         public DangerSpaceObject(SpaceObjectType type, IModelLogger logger) : base(type, logger) 
         {
             hp = 1;
@@ -15,5 +19,11 @@ namespace Assets.SpaceModel.DangerSpaceObjects
         /// </summary>
         /// <returns></returns>
         public abstract Int32 GetScore();
+
+        public override void Destroy()
+        {
+            this.isNeedGetScore = false;
+            base.Destroy();
+        }
     }
 }

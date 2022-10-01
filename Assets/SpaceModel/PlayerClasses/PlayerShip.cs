@@ -12,9 +12,11 @@ namespace Assets.SpaceModel.PlayerClasses
         public PlayerShip(IModelLogger logger) :base(SpaceObjectType.player, logger)
         {
             this.chargeCountPrivate = MAX_CHARGE_COUNT;
+        }
+        public override void SetMaxHP()
+        {
             this.hp = 3;
         }
-
         public override Boolean CollideWithObject(SpaceObject spaceObject)
         {
             SpaceObjectType type = spaceObject.type;

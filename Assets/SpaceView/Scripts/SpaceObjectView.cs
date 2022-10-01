@@ -15,6 +15,15 @@ namespace View
         [SerializeField]
         private Transform spriteSlot = null;
         /// <summary>
+        /// Трансформ префаба спрайта выданного этому объекту.
+        /// </summary>
+        private Transform spritePrefab;
+        /// <summary>
+        /// Коллайдер, который висит на этом объекте.
+        /// </summary>
+        [SerializeField]
+        private BoxCollider2D boxCollider = null;
+        /// <summary>
         /// Модельный боевой объект.
         /// </summary>
         private SpaceObject modelSpaceObjectPrivate;
@@ -26,37 +35,29 @@ namespace View
             get => this.modelSpaceObjectPrivate;
         }
 
-        private void UpdatePositionAndDirection()
-        {
-        }
+        #region Move component
+
         /// <summary>
-        /// Установить начальнуые положение и направление.
+        /// Компонент для передвижения этого объекта.
         /// </summary>
-        /// <param name="positionAndDirection"></param>
-        private void InitPositionAndDirection(in Borders.PositionAndDirection positionAndDirection)
+        public AbstractMove moveComponent { get; private set; }
+        /// <summary>
+        /// Пулл компонентов для передвижения.
+        /// </summary>
+        private SpaceObjectMovePool movePool
         {
-            if ((Int32)this.modelSpaceObject.type == (Int32)SpaceObjectType.player)
-            {
-                this.transform.localPosition = new Vector3(0, 0, 0);
-                this.transform.TransformDirection(new Vector3(0, 1, 0));
-            }
-            else
-            {
-                this.transform.localPosition = positionAndDirection.position;
-                this.transform.TransformDirection(new Vector3
-                    (
-                    positionAndDirection.direction.x,
-                    positionAndDirection.direction.y,
-                    0
-                    ));
-            }
+            get => PoolsKeeper.instance.GetSpaceObjectMovePool();
         }
+
+        #endregion Move component
+
         /// <summary>
         /// Инициализировать объект.
         /// </summary>
         /// <param name="spaceObject">Модельный боевой объект.</param>
-        public void Initialize(SpaceObject spaceObject, in Borders.PositionAndDirection positionAndDirection)
+        public void Initialize(SpaceObject spaceObject, Borders battleFieldborders)
         {
+            Int32 type = (Int32)spaceObject.type;
             //Контракты.
             if (spaceObject == null)
             {
@@ -68,8 +69,8 @@ namespace View
                 LogError("spriteSlot is null!");
                 return;
             }
-            if ((Int32)spaceObject.type == (Int32)SpaceObjectType.unknow
-            || (Int32)spaceObject.type > (Int32)SpaceObjectType.end)
+            if (type == (Int32)SpaceObjectType.unknow
+            || type > (Int32)SpaceObjectType.end)
             {
                 LogError("Type of space object unknow!");
                 return;
@@ -78,14 +79,22 @@ namespace View
             //Инициализация.
             this.modelSpaceObjectPrivate = spaceObject;
 
-            InitPositionAndDirection(positionAndDirection);
+            SpaceObjectMoveInfo moveInfo = new SpaceObjectMoveInfo()
+            {
+                spaceObjectTransform = this.transform,
+                battleFieldborders = battleFieldborders,
+            };
+            this.moveComponent = this.movePool.GetMoveComponent(type);
+            this.moveComponent.Init(moveInfo);
+            this.moveComponent.onOutFromBattleZone += spaceObject.Destroy;
 
             this.gameObject.name = spaceObject.type.ToString();
             BattlePrefabPool pool = PoolsKeeper.instance.GetBattlePrefabPool();
-            Transform spritePrefab = pool.GetBattlePrefab((Int32)spaceObject.type).transform;
+            Transform spritePrefab = pool.GetBattlePrefab(type).transform;
             spritePrefab.SetParent(this.spriteSlot, false);
+            this.spritePrefab = spritePrefab;
+            this.boxCollider.size = spritePrefab.localScale;
         }
-
 
         /// <summary>
         /// Пул космических объектов.
@@ -105,8 +114,10 @@ namespace View
         public void DestroySpaceObject()
         {
             BattlePrefabPool pool = PoolsKeeper.instance.GetBattlePrefabPool();
-            pool.PushBattlePrefab((Int32)this.modelSpaceObjectPrivate.type, this.spriteSlot.gameObject);
-            this.spriteSlot = null;
+            pool.PushBattlePrefab((Int32)this.modelSpaceObjectPrivate.type, this.spritePrefab.gameObject);
+            this.moveComponent.onOutFromBattleZone -= this.modelSpaceObjectPrivate.Destroy;
+            this.moveComponent.DestroyMoveObject();
+            this.moveComponent = null;
             this.modelSpaceObjectPrivate = null;
             this.pool.PushSpaceObjectView(this);
             this.gameObject.name = "SpaceObjectView";

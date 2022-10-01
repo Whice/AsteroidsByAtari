@@ -15,7 +15,6 @@ namespace View
         /// Пулл объектов для переиспользования.
         /// </summary>
         private Stack<SpaceObjectView> pool = new Stack<SpaceObjectView>(100);
-
         public SpaceObjectViewPool(SpaceObjectView templateObject)
         {
             this.templateObject = templateObject;
@@ -26,7 +25,7 @@ namespace View
         /// </summary>
         /// <param name="typePrefab"></param>
         /// <returns></returns>
-        public SpaceObjectView GetSpaceObjectView(SpaceObject spaceObject, in Borders.PositionAndDirection positionAndDirection)
+        public SpaceObjectView GetSpaceObjectView(SpaceObject spaceObject, Borders battleFieldborders)
         {
             SpaceObjectView soView = null;
             if (pool.Count > 0)
@@ -38,7 +37,7 @@ namespace View
                 soView = GameObject.Instantiate(this.templateObject);
             }
 
-            soView.Initialize(spaceObject, positionAndDirection);
+            soView.Initialize(spaceObject, battleFieldborders);
             soView.InitPool(this);
             soView.gameObject.SetActive(true);
             return soView;

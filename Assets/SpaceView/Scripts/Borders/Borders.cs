@@ -10,6 +10,8 @@ namespace View
     public class Borders : MonoBehaviourLogger
     {
         [SerializeField]
+        private Transform spaceBorders = null;
+        [SerializeField]
         private Transform battleField = null;
         [SerializeField]
         private Transform rigthBorder = null;
@@ -46,6 +48,14 @@ namespace View
             borderPosition.left = place.position.x - place.localScale.x / 2;
 
             return borderPosition;
+        }
+        /// <summary>
+        /// Получить позиции границ игрового поля.
+        /// </summary>
+        /// <returns></returns>
+        public BorderPosition GetBorderPositionSpaceBorders()
+        {
+            return GetBorderPosition(this.spaceBorders);
         }
         /// <summary>
         /// Получить позиции границ игрового поля.
@@ -111,7 +121,7 @@ namespace View
             }
 
             //Направление всегда будет куда-то на поле боя.
-            positionAndDirection.direction = GetRandomPosition(this.battleField).normalized;
+            positionAndDirection.direction = (GetRandomPosition(this.battleField)-positionAndDirection.position).normalized;
 
             return positionAndDirection;
         }

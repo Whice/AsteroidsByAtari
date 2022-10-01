@@ -11,5 +11,9 @@
         /// <param name="player">Инфо об игроке.</param>
         public Bullet(PlayerShip player, IModelLogger logger) : base(SpaceObjectType.simpleBullet, logger)
         { }
+        public override void SetMaxHP()
+        {
+            this.hp = 1;
+        }
     }
 }

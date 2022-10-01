@@ -56,10 +56,39 @@ namespace Assets.SpaceModel
         /// Передает информацию о состоянии боя на момент окончания.
         /// </summary>
         public event Action<BattleInfo> onEndedGame;
+
+        /// <summary>
+        /// Уменьшить или увеличить количество опасных объектов.
+        /// </summary>
+        /// <param name="type">Тип объекта.</param>
+        /// <param name="isReduce">true - увеличить, иначе - уменьшить.</param>
+        private void ReduceOrIncreaseNumberOfDangerouslyObjects(SpaceObjectType type, Boolean isReduce)
+        {
+            int delta = isReduce ? 1 : -1;
+            switch ((Int32)type)
+            {
+                case (Int32)SpaceObjectType.bigAsteroid:
+                    {
+                        this.dangerousObjectsCountsPrivate.bigAsteroids += delta;
+                        break;
+                    }
+                case (Int32)SpaceObjectType.asteroidShard:
+                    {
+                        this.dangerousObjectsCountsPrivate.asteroidShards += delta;
+                        break;
+                    }
+                case (Int32)SpaceObjectType.nlo:
+                    {
+                        this.dangerousObjectsCountsPrivate.NLOs += delta;
+                        break;
+                    }
+            }
+        }
         /// <summary>
         /// Произошло уничтожение игрока
         /// </summary>
         public event Action<SpaceObject> OnDestroedActiveObject;
+       
         /// <summary>
         /// Выпонить действия при уничтожении игрового объекта.
         /// </summary>
@@ -79,6 +108,7 @@ namespace Assets.SpaceModel
                     return;
                 }
 
+                ReduceOrIncreaseNumberOfDangerouslyObjects(spaceObject.type, false);
                 this.battleInfo.score += dangerSpaceObject.GetScore();
                 this.onChangedScore?.Invoke(this.score);
             }
@@ -108,25 +138,7 @@ namespace Assets.SpaceModel
                 this.activeObects.Add(spaceObject);
                 this.onCreatedSpaceObject?.Invoke(spaceObject);
 
-
-                switch ((Int32)type)
-                {
-                    case (Int32)SpaceObjectType.bigAsteroid:
-                        {
-                            ++this.dangerousObjectsCountsPrivate.bigAsteroids;
-                            break;
-                        }
-                    case (Int32)SpaceObjectType.asteroidShard:
-                        {
-                            ++this.dangerousObjectsCountsPrivate.asteroidShards;
-                            break;
-                        }
-                    case (Int32)SpaceObjectType.nlo:
-                        {
-                            ++this.dangerousObjectsCountsPrivate.NLOs;
-                            break;
-                        }
-                }
+                ReduceOrIncreaseNumberOfDangerouslyObjects(type, true);                
             }
 
             if (spaceObject == null)
@@ -291,8 +303,8 @@ namespace Assets.SpaceModel
 
             this.maxmumDangerousObjectsCountsPrivate = new DangerousObjectsCounts
             {
-                bigAsteroids = 5,
-                asteroidShards = 10,
+                bigAsteroids = 8,
+                asteroidShards = 20,
                 NLOs = 1
             };
 

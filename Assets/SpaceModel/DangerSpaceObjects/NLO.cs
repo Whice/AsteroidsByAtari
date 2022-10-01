@@ -7,10 +7,13 @@
     {
         public NLO(IModelLogger logger) : base(SpaceObjectType.nlo, logger)
         { }
-
+        public override void SetMaxHP()
+        {
+            this.hp = 1;
+        }
         public override int GetScore()
         {
-            return 5;
+            return this.isNeedGetScore ? 5 : 0;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Assets.SpaceModel.Extensions;
+﻿using Assets.SpaceModel.DangerSpaceObjects;
+using Assets.SpaceModel.Extensions;
 using System;
 using System.Collections.Generic;
 
@@ -87,23 +88,29 @@ namespace Assets.SpaceModel
             }
             this.pools[spaceObject.type].Push(spaceObject);
         }
-            /// <summary>
-            /// Вытащить из пула объект заданного типа.
-            /// </summary>
-            /// <param name="type"></param>
-            /// <returns></returns>
-            public SpaceObject Pop(SpaceObjectType type)
+        /// <summary>
+        /// Вытащить из пула объект заданного типа.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public SpaceObject Pop(SpaceObjectType type)
         {
-            SpaceObject objectForPop=null;
+            SpaceObject objectForPop = null;
             if (this.pools.ContainsKey(type) && this.pools[type].Count > 0)
             {
-                objectForPop= this.pools[type].Pop();
+                objectForPop = this.pools[type].Pop();
             }
             else
             {
                 objectForPop = CreateSpaceObjects(type);
             }
 
+            if (type.IsDangerObjectType())
+            {
+                ((DangerSpaceObject)objectForPop).isNeedGetScore = true;
+            }
+
+            objectForPop.SetMaxHP();
             objectForPop.OnDestroed += Push;
             return objectForPop;
         }
