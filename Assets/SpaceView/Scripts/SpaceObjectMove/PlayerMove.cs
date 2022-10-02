@@ -47,15 +47,15 @@ namespace View
             this.direction = ORIGIN_DIRECTION;
             float PI8 = Mathf.PI / ANGLE_DIVISOR;
             this.rotateAngle = new Vector3(Mathf.Cos(PI8), Mathf.Sin(PI8), PI8 * 180 / Mathf.PI);
+            this.input = InputSystemProvider.instance.battlePlayerInputSystem;
         }
 
         #region Input system
 
-        private const Int32 ANGLE_DIVISOR = 8;
         /// <summary>
         /// Система ввода во время боя.
         /// </summary>
-        private BattleInput input = new BattleInput();
+        private BattleInput input;
         /// <summary>
         /// Подписаться на события системы ввода и включить ее.
         /// </summary>
@@ -125,6 +125,10 @@ namespace View
 
         #region Реализация передвижения игрока.
 
+        /// <summary>
+        /// Делитель пи для уменьшения угла поворота.
+        /// </summary>
+        private const Int32 ANGLE_DIVISOR = 8;
         /// <summary>
         /// Исходное напрваление.
         /// </summary>
@@ -228,11 +232,12 @@ namespace View
             {
                 float delatTime = Time.deltaTime;
                 this.leftTimeAfterCorrect += delatTime;
-                float a = this.rotateAngle.x * delatTime*this.speedOfTurn;
-                float b = this.rotateAngle.y * delatTime * this.speedOfTurn;
+                float deltaTimeAndSpeedOfTurn = delatTime * this.speedOfTurn;
+                float a = this.rotateAngle.x * deltaTimeAndSpeedOfTurn;
+                float b = this.rotateAngle.y * deltaTimeAndSpeedOfTurn;
                 Vector2 rotate = RotateVectorWithComplex(this.direction, a, b);
-                float deltaRotate = this.rotateAngle.z * delatTime * this.speedOfTurn;
-                Vector3 rot = this.spaceObjectTransform.rotation.eulerAngles;
+                float deltaRotate = this.rotateAngle.z * deltaTimeAndSpeedOfTurn;
+                Vector3 rot = this.rotation.eulerAngles;
                 if (this.isTurnOnLeft)
                 {
                     float newAngle = rot.z + deltaRotate;

@@ -91,6 +91,13 @@ namespace View
         /// </summary>
         public Vector2 direction { get;protected set; }
         /// <summary>
+        /// Поворот объекта, которому принадлежит компонен движения.
+        /// </summary>
+        public Quaternion rotation
+        {
+            get => this.spaceObjectTransform.rotation;
+        }
+        /// <summary>
         /// Скорость, с которой передвигается объект.
         /// </summary>
         protected float speed;

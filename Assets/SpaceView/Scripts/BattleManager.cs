@@ -10,6 +10,16 @@ namespace View
     /// </summary>
     public class BattleManager : MonoBehaviourLogger
     {
+
+        #region Input system
+
+        /// <summary>
+        /// Система ввода во время боя.
+        /// </summary>
+        private BattleInput battleInput;
+
+        #endregion Input system
+
         /// <summary>
         /// Инфо о визуальной части.
         /// </summary>
@@ -80,7 +90,7 @@ namespace View
         {
             SpaceObjectViewPool pool = PoolsKeeper.instance.GetSpaceObjectViewPool();
             SpaceObjectView view = null;
-            if (sObject.type == SpaceObjectType.asteroidShard)
+             if (sObject.type == SpaceObjectType.asteroidShard)
             {
                 if (this.destroyedBigAsteroids.Count > 0)
                 {
@@ -161,9 +171,11 @@ namespace View
         /// </summary>
         public void StartGame()
         {
+            this.battleInput = InputSystemProvider.instance.battlePlayerInputSystem;
             this.battleModel.onCreatedSpaceObject += OnCreateSpaceObject;
             this.battleModel.OnDestroedActiveObject += OnDestoySpaceObject;
             this.battleModel.onEndedGame += OnEndGame;
+            this.battleInput.Player.LazerShot.performed += (context) => this.battleModel.PlayerLazerShot();
             this.battleModel.StartGame();
             this.isGameStarted = true;
         }
@@ -179,6 +191,7 @@ namespace View
             {
                 this.activeSpaceObjects[i].DestroySpaceObject();
             }
+            this.battleInput.Player.LazerShot.performed -= (context) => this.battleModel.PlayerLazerShot();
         }
 
         /// <summary>
@@ -190,7 +203,9 @@ namespace View
         {
             if (this.isGameStarted)
             {
-                this.battleModel.PlayerBulletShot();
+                float bulletShot = this.battleInput.Player.BulletShot.ReadValue<float>();
+                if(bulletShot != 0)
+                    this.battleModel.PlayerBulletShot();
                 float delatTime = Time.deltaTime;
                 this.battleModel.Update(delatTime);
                 for (int i = 0; i < this.activeSpaceObjects.Count; i++)
@@ -203,7 +218,7 @@ namespace View
             this.battleModel.onCreatedSpaceObject -= OnCreateSpaceObject;
             this.battleModel.OnDestroedActiveObject -= OnDestoySpaceObject;
             this.battleView.OnInited -= StartGame;
-            this.battleModel.onEndedGame -= OnEndGame;
+             this.battleModel.onEndedGame -= OnEndGame;
         }
     }
 }

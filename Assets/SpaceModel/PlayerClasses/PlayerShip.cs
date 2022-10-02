@@ -36,7 +36,7 @@ namespace Assets.SpaceModel.PlayerClasses
         }
 
 
-        #region Выстрел лазером.
+        #region Выстрел.
 
 
         #region Количество зарядов лазером.
@@ -146,6 +146,6 @@ namespace Assets.SpaceModel.PlayerClasses
             }
         }
 
-        #endregion Выстрел лазером.
+        #endregion Выстрел.
     }
 }
