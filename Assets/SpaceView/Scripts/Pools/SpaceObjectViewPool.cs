@@ -23,9 +23,11 @@ namespace View
         /// <summary>
         /// Получить космический объект.
         /// </summary>
-        /// <param name="typePrefab"></param>
-        /// <returns></returns>
-        public SpaceObjectView GetSpaceObjectView(SpaceObject spaceObject, Borders battleFieldborders)
+        /// <param name="spaceObject">Модельный боевой объект.</param>
+        /// <param name="battleFieldborders">Границы боевого пространства.</param>
+        /// <param name="targetForBorn">Цель для появления объекта, 
+        /// если требуется появление объета в определенном месте, где был другой.</param>
+        public SpaceObjectView GetSpaceObjectView(SpaceObject spaceObject, Borders battleFieldborders, SpaceObjectView targetForBorn = null)
         {
             SpaceObjectView soView = null;
             if (pool.Count > 0)
@@ -37,7 +39,7 @@ namespace View
                 soView = GameObject.Instantiate(this.templateObject);
             }
 
-            soView.Initialize(spaceObject, battleFieldborders);
+            soView.Initialize(spaceObject, battleFieldborders, targetForBorn);
             soView.InitPool(this);
             soView.gameObject.SetActive(true);
             return soView;

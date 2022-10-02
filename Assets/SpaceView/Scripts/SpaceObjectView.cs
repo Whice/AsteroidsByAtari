@@ -55,7 +55,10 @@ namespace View
         /// Инициализировать объект.
         /// </summary>
         /// <param name="spaceObject">Модельный боевой объект.</param>
-        public void Initialize(SpaceObject spaceObject, Borders battleFieldborders)
+        /// <param name="battleFieldborders">Границы боевого пространства.</param>
+        /// <param name="targetForBorn">Цель для появления объекта, 
+        /// если требуется появление объета в определенном месте, где был другой.</param>
+        public void Initialize(SpaceObject spaceObject, Borders battleFieldborders, SpaceObjectView targetForBorn=null)
         {
             Int32 type = (Int32)spaceObject.type;
             //Контракты.
@@ -85,6 +88,8 @@ namespace View
                 battleFieldborders = battleFieldborders,
             };
             this.moveComponent = this.movePool.GetMoveComponent(type);
+            if (targetForBorn != null && this.moveComponent is AsteroidShardMove shardMove)
+                shardMove.SetTarget(targetForBorn.moveComponent);
             this.moveComponent.Init(moveInfo);
             this.moveComponent.onOutFromBattleZone += spaceObject.Destroy;
 
@@ -122,12 +127,15 @@ namespace View
             this.pool.PushSpaceObjectView(this);
             this.gameObject.name = "SpaceObjectView";
         }
-
+        /// <summary>
+        /// Требуется дополнительное действие при уничтожении объекта.
+        /// </summary>
+        private Boolean isNeedAdditionalAction = false;
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             SpaceObjectView view = collision.gameObject.GetComponent<SpaceObjectView>();
-            this.modelSpaceObject.CollideWithObject(view.modelSpaceObject);
+            this.isNeedAdditionalAction = this.modelSpaceObject.CollideWithObject(view.modelSpaceObject);
         }
     }
 }

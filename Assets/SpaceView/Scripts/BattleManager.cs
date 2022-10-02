@@ -34,23 +34,89 @@ namespace View
         private BattleModel battleModel = new BattleModel();
 
         /// <summary>
+        /// Большой астероид для создания его частей.
+        /// </summary>
+        private class BigSteroidForShards
+        {
+            public BigSteroidForShards(Int32 shardsLeftOver, SpaceObjectView targetBigAsteroid)
+            {
+                this.shardsLeftOver = shardsLeftOver;
+                this.targetBigAsteroidPrivate = targetBigAsteroid;
+            }
+            /// <summary>
+            /// Частей осталось создать.
+            /// </summary>
+            private Int32 shardsLeftOver;
+            /// <summary>
+            /// Цель - большой астероид для создания частей.
+            /// </summary>
+            private SpaceObjectView targetBigAsteroidPrivate;
+            /// <summary>
+            /// Цель - большой астероид для создания частей.
+            /// </summary>
+            public SpaceObjectView targetBigAsteroid
+            {
+                get
+                {
+                    --this.shardsLeftOver;
+                    return targetBigAsteroidPrivate;
+                }
+            }
+            /// <summary>
+            /// Структуру надо уничтожить, она больше не нужна.
+            /// </summary>
+            public Boolean isNeedDestroy
+            {
+                get => this.shardsLeftOver < 1;
+            }
+        }
+        private List<BigSteroidForShards> destroyedBigAsteroids = new List<BigSteroidForShards>();
+
+        /// <summary>
         /// Создать и нарисовать космический объект.
         /// </summary>
         /// <param name="sObject"></param>
         private void OnCreateSpaceObject(SpaceObject sObject)
         {
             SpaceObjectViewPool pool = PoolsKeeper.instance.GetSpaceObjectViewPool();
-            SpaceObjectView view = pool.GetSpaceObjectView
+            SpaceObjectView view = null;
+            if (sObject.type == SpaceObjectType.asteroidShard)
+            {
+                if (this.destroyedBigAsteroids.Count > 0)
+                {
+                    int lastIndex = this.destroyedBigAsteroids.Count - 1;
+                    BigSteroidForShards target = this.destroyedBigAsteroids[lastIndex];
+                    view = pool.GetSpaceObjectView
+                    (
+                    sObject,
+                    this.battleView.battleFieldBorders,
+                    target.targetBigAsteroid
+                    );
+                    if (target.isNeedDestroy)
+                    {
+                        target.targetBigAsteroid.DestroySpaceObject();
+                        this.destroyedBigAsteroids.RemoveAt(lastIndex);
+                    }
+                }
+                else
+                {
+                    LogError("Attempting to create a part of an asteroid when the asteroid was not destroyed!");
+                }
+            }
+            else
+            {
+                view = pool.GetSpaceObjectView
                 (
                 sObject,
                 this.battleView.battleFieldBorders
                 );
+            }
             this.activeSpaceObjects.Add(view);
             if (view.transform.parent == null)
                 view.transform.SetParent(this.activeObjectPlaceInHierarchy, false);
         }
-        /// <su/// <summary>
-        /// Создать и нарисовать космический объект.
+        /// <summary>
+        /// Уничтожить и отправить в пулл космический объект.
         /// </summary>
         /// <param name="sObject"></param>
         private void OnDestoySpaceObject(SpaceObject sObject)
@@ -65,13 +131,23 @@ namespace View
                     indexForRemove = i;
                     break;
                 }
-                }
-                if (soView == null || indexForRemove==-1)
+            }
+            if (soView == null || indexForRemove == -1)
             {
                 LogError("The specified SpaceObjectView is not found among the active objects!");
                 return;
             }
-            soView.DestroySpaceObject();
+
+            if (sObject.type == SpaceObjectType.bigAsteroid)
+            {
+                BigSteroidForShards target = new BigSteroidForShards(this.battleModel.shardsAfterDestroyBigAsteroidCount, soView);
+                this.destroyedBigAsteroids.Add(target);
+            }
+            else
+            {
+                soView.DestroySpaceObject();
+            }
+
             this.activeSpaceObjects.RemoveAt(indexForRemove);
         }
 

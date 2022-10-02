@@ -45,12 +45,13 @@ namespace View
         public PlayerMove()
         {
             this.direction = ORIGIN_DIRECTION;
-            float PI2 = Mathf.PI / 2;
-            this.rotateAngle = new Vector3(Mathf.Cos(PI2), Mathf.Sin(PI2), PI2 * 180 / Mathf.PI);
+            float PI8 = Mathf.PI / ANGLE_DIVISOR;
+            this.rotateAngle = new Vector3(Mathf.Cos(PI8), Mathf.Sin(PI8), PI8 * 180 / Mathf.PI);
         }
 
         #region Input system
 
+        private const Int32 ANGLE_DIVISOR = 8;
         /// <summary>
         /// Система ввода во время боя.
         /// </summary>
@@ -153,23 +154,6 @@ namespace View
         /// </summary>
         private bool isTurnOnRight = false;
         /// <summary>
-        /// Выполнить замедление или ускорение.
-        /// </summary>
-        private void PerformAccelerationOrFade()
-        {
-            if (this.isAccelerate)
-            {
-                this.speed += acceleration * Time.deltaTime;
-            }
-            else
-            {
-                if (this.inertia.sqrMagnitude > 0)
-                    this.speed -= FADE * Time.deltaTime;
-                else
-                    this.speed = 0;
-            }
-        }
-        /// <summary>
         /// Переменная, хранящая данные об угле поворота.
         /// x - a;
         /// y - b;
@@ -214,22 +198,12 @@ namespace View
             }
             if (!this.isCorrected)
             {
-                if (MathF.Abs(oldAngle - rotateAngle * 0) < deltaAngles)
-                    angle = CorrectWithIndex(0);
-                else if (MathF.Abs(oldAngle - rotateAngle * 1) < deltaAngles)
-                    angle = CorrectWithIndex(1);
-                else if (MathF.Abs(oldAngle - rotateAngle * 2) < deltaAngles)
-                    angle = CorrectWithIndex(2);
-                else if (MathF.Abs(oldAngle - rotateAngle * 3) < deltaAngles)
-                    angle = CorrectWithIndex(3);
-                else if (MathF.Abs(oldAngle - rotateAngle * 4) < deltaAngles)
-                    angle = CorrectWithIndex(4);
-                else if (MathF.Abs(oldAngle - rotateAngle * 5) < deltaAngles)
-                    angle = CorrectWithIndex(5);
-                else if (MathF.Abs(oldAngle - rotateAngle * 6) < deltaAngles)
-                    angle = CorrectWithIndex(6);
-                else if (MathF.Abs(oldAngle - rotateAngle * 7) < deltaAngles)
-                    angle = CorrectWithIndex(7);
+                for (Int32 i = 0; i < ANGLE_DIVISOR; i++)
+                    if (MathF.Abs(oldAngle - rotateAngle * i) < deltaAngles)
+                    {
+                        angle = CorrectWithIndex(i);
+                        break;
+                    }
 
             }
         }
@@ -244,6 +218,7 @@ namespace View
         {
             return new Vector2(vector.x * a - vector.y * b, vector.x * b + vector.y * a);
         }
+        private float speedOfTurn = 5;
         /// <summary>
         /// ВЫполнить поворот.
         /// </summary>
@@ -253,10 +228,10 @@ namespace View
             {
                 float delatTime = Time.deltaTime;
                 this.leftTimeAfterCorrect += delatTime;
-                float a = this.rotateAngle.x * delatTime;
-                float b = this.rotateAngle.y * delatTime;
+                float a = this.rotateAngle.x * delatTime*this.speedOfTurn;
+                float b = this.rotateAngle.y * delatTime * this.speedOfTurn;
                 Vector2 rotate = RotateVectorWithComplex(this.direction, a, b);
-                float deltaRotate = this.rotateAngle.z * delatTime;
+                float deltaRotate = this.rotateAngle.z * delatTime * this.speedOfTurn;
                 Vector3 rot = this.spaceObjectTransform.rotation.eulerAngles;
                 if (this.isTurnOnLeft)
                 {

@@ -56,7 +56,10 @@ namespace Assets.SpaceModel
         /// Передает информацию о состоянии боя на момент окончания.
         /// </summary>
         public event Action<BattleInfo> onEndedGame;
-
+        /// <summary>
+        /// Количество осколков астероида должно появиться после его уничтожения.
+        /// </summary>
+        public Int32 shardsAfterDestroyBigAsteroidCount = 3;
         /// <summary>
         /// Уменьшить или увеличить количество опасных объектов.
         /// </summary>
@@ -70,11 +73,6 @@ namespace Assets.SpaceModel
                 case (Int32)SpaceObjectType.bigAsteroid:
                     {
                         this.dangerousObjectsCountsPrivate.bigAsteroids += delta;
-                        break;
-                    }
-                case (Int32)SpaceObjectType.asteroidShard:
-                    {
-                        this.dangerousObjectsCountsPrivate.asteroidShards += delta;
                         break;
                     }
                 case (Int32)SpaceObjectType.nlo:
@@ -111,6 +109,11 @@ namespace Assets.SpaceModel
                 ReduceOrIncreaseNumberOfDangerouslyObjects(spaceObject.type, false);
                 this.battleInfo.score += dangerSpaceObject.GetScore();
                 this.onChangedScore?.Invoke(this.score);
+            }
+
+            if (spaceObject.type == SpaceObjectType.bigAsteroid)
+            {
+                CreateSpaceObject(SpaceObjectType.asteroidShard, this.shardsAfterDestroyBigAsteroidCount);
             }
 
             //Уничтожение игрока означает конец игры.
@@ -200,10 +203,6 @@ namespace Assets.SpaceModel
             /// </summary>
             public Int32 bigAsteroids;
             /// <summary>
-            /// Максимум частей астероидов в игре.
-            /// </summary>
-            public Int32 asteroidShards;
-            /// <summary>
             /// Максимум НЛО в игре.
             /// </summary>
             public Int32 NLOs;
@@ -216,7 +215,6 @@ namespace Assets.SpaceModel
                 get => new DangerousObjectsCounts
                 {
                     bigAsteroids = 0,
-                    asteroidShards = 0,
                     NLOs = 0
                 };
             }
@@ -284,10 +282,6 @@ namespace Assets.SpaceModel
                 {
                     CreateSpaceObject(SpaceObjectType.bigAsteroid);
                 }
-                if (this.dangerousObjectsCounts.asteroidShards < this.maxmumDangerousObjectsCounts.asteroidShards)
-                {
-                    CreateSpaceObject(SpaceObjectType.asteroidShard);
-                }
             }
         }
 
@@ -304,7 +298,6 @@ namespace Assets.SpaceModel
             this.maxmumDangerousObjectsCountsPrivate = new DangerousObjectsCounts
             {
                 bigAsteroids = 8,
-                asteroidShards = 20,
                 NLOs = 1
             };
 

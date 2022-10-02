@@ -9,7 +9,7 @@ namespace Assets.SpaceModel.DangerSpaceObjects
         }
         public override void SetMaxHP()
         {
-            this.hp = 2;
+            this.hp = 1;
         }
 
         public override Boolean CollideWithObject(SpaceObject spaceObject)
