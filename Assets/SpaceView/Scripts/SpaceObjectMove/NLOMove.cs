@@ -2,7 +2,7 @@
 
 namespace View
 {
-    public class NLOMove : AbstractMove
+    public class NLOMove : AbstractMoveWithTarget
     {
         public override void Init(in SpaceObjectMoveInfo info)
         {
@@ -10,18 +10,7 @@ namespace View
             this.speed = 1.1f;
             this.type = Assets.SpaceModel.SpaceObjectType.nlo;
         }
-        /// <summary>
-        /// Цель, к которой будет стремиться нло.
-        /// </summary>
-        private AbstractMove target;
-        /// <summary>
-        /// Установить цель, к которой будет стремиться нло.
-        /// </summary>
-        /// <param name="target">Цель, к которой будет стремиться нло.</param>
-        public void SetTarget(AbstractMove target)
-        {
-            this.target = target;
-        }
+        
         /// <summary>
         /// Частота смены направления у нло.
         /// </summary>

@@ -58,7 +58,7 @@ namespace View
         /// <summary>
         /// Положение в пространстве передвигаемого объекта.
         /// </summary>
-        protected Transform spaceObjectTransform;
+        public Transform spaceObjectTransform { get; protected set; }
         /// <summary>
         /// Инициализировать объект.
         /// </summary>
@@ -89,7 +89,7 @@ namespace View
         /// <summary>
         /// Направление в 2d.
         /// </summary>
-        protected Vector2 direction;
+        public Vector2 direction { get;protected set; }
         /// <summary>
         /// Скорость, с которой передвигается объект.
         /// </summary>

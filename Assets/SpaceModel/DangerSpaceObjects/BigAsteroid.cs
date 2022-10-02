@@ -25,7 +25,7 @@ namespace Assets.SpaceModel.DangerSpaceObjects
             //При попадании лазером просто уничтожить большой астероид.
             else if ((Int32)spaceObject.type == (Int32)SpaceObjectType.laser)
             {
-                this.hp = 0;
+                this.isNeedSetHPZero = true;
                 return false;
             }
 

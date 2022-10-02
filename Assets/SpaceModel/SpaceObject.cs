@@ -70,10 +70,30 @@ namespace Assets.SpaceModel
             }
         }
         /// <summary>
+        /// Требуется уменьшить очки жизни.
+        /// </summary>
+        protected Boolean isNeedIncreaseHP = false;
+        /// <summary>
+        /// Требуется установить очки жизни равными 0.
+        /// </summary>
+        protected Boolean isNeedSetHPZero = false;
+        /// <summary>
         /// Обновить внутренние данные.
         /// </summary>
         /// <param name="timeAfterLastTick">Время проедшее после последнего игрового тика.</param>
-        public virtual void Update(Single timeAfterLastTick) { }
+        public virtual void Update(Single timeAfterLastTick) 
+        {
+            if (this.isNeedIncreaseHP)
+            {
+                --this.hp;
+                this.isNeedIncreaseHP = false;
+            }
+            if (this.isNeedSetHPZero)
+            {
+                this.hp = 0;
+                this.isNeedSetHPZero = false;
+            }
+        }
 
         #endregion Изменение свойств.
 
@@ -103,7 +123,7 @@ namespace Assets.SpaceModel
             SpaceObjectType type = spaceObject.type;
             if (IsDangerObjectWith(type))
             {
-                --this.hp;
+                this.isNeedIncreaseHP=true;
             }
 
             return false;
@@ -149,7 +169,7 @@ namespace Assets.SpaceModel
         /// </summary>
         public virtual void Destroy()
         {
-            this.hp = 0;
+            this.isNeedSetHPZero = true;
         }
 
         /// <summary>

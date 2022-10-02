@@ -2,7 +2,7 @@
 
 namespace View
 {
-    public class LazerMove : AbstractMove
+    public class LazerMove : WeaponMove
     {
         public override void Init(in SpaceObjectMoveInfo info)
         {

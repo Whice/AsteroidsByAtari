@@ -28,7 +28,7 @@ public partial class @BattleInput : IInputActionCollection2, IDisposable
             ""id"": ""85e82f7f-9e47-450e-a045-09adf0df65e8"",
             ""actions"": [
                 {
-                    ""name"": ""Shot"",
+                    ""name"": ""BulletShot"",
                     ""type"": ""Button"",
                     ""id"": ""1eb7b00e-0062-423d-9478-32f471c33a28"",
                     ""expectedControlType"": ""Button"",
@@ -53,6 +53,15 @@ public partial class @BattleInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LazerShot"",
+                    ""type"": ""Button"",
+                    ""id"": ""43e9335b-66c7-4a20-9c0d-b1ba5196fe41"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -63,7 +72,7 @@ public partial class @BattleInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Shot"",
+                    ""action"": ""BulletShot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -110,6 +119,17 @@ public partial class @BattleInput : IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d30670b-6ccb-4d91-b9a4-f68bb1af20fd"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LazerShot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -130,9 +150,10 @@ public partial class @BattleInput : IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Shot = m_Player.FindAction("Shot", throwIfNotFound: true);
+        m_Player_BulletShot = m_Player.FindAction("BulletShot", throwIfNotFound: true);
         m_Player_Rotate = m_Player.FindAction("Rotate", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_LazerShot = m_Player.FindAction("LazerShot", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -192,16 +213,18 @@ public partial class @BattleInput : IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
-    private readonly InputAction m_Player_Shot;
+    private readonly InputAction m_Player_BulletShot;
     private readonly InputAction m_Player_Rotate;
     private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_LazerShot;
     public struct PlayerActions
     {
         private @BattleInput m_Wrapper;
         public PlayerActions(@BattleInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Shot => m_Wrapper.m_Player_Shot;
+        public InputAction @BulletShot => m_Wrapper.m_Player_BulletShot;
         public InputAction @Rotate => m_Wrapper.m_Player_Rotate;
         public InputAction @Move => m_Wrapper.m_Player_Move;
+        public InputAction @LazerShot => m_Wrapper.m_Player_LazerShot;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -211,28 +234,34 @@ public partial class @BattleInput : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
             {
-                @Shot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShot;
-                @Shot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShot;
-                @Shot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShot;
+                @BulletShot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBulletShot;
+                @BulletShot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBulletShot;
+                @BulletShot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBulletShot;
                 @Rotate.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotate;
                 @Rotate.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotate;
                 @Rotate.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRotate;
                 @Move.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
+                @LazerShot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLazerShot;
+                @LazerShot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLazerShot;
+                @LazerShot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLazerShot;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Shot.started += instance.OnShot;
-                @Shot.performed += instance.OnShot;
-                @Shot.canceled += instance.OnShot;
+                @BulletShot.started += instance.OnBulletShot;
+                @BulletShot.performed += instance.OnBulletShot;
+                @BulletShot.canceled += instance.OnBulletShot;
                 @Rotate.started += instance.OnRotate;
                 @Rotate.performed += instance.OnRotate;
                 @Rotate.canceled += instance.OnRotate;
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @LazerShot.started += instance.OnLazerShot;
+                @LazerShot.performed += instance.OnLazerShot;
+                @LazerShot.canceled += instance.OnLazerShot;
             }
         }
     }
@@ -248,8 +277,9 @@ public partial class @BattleInput : IInputActionCollection2, IDisposable
     }
     public interface IPlayerActions
     {
-        void OnShot(InputAction.CallbackContext context);
+        void OnBulletShot(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
+        void OnLazerShot(InputAction.CallbackContext context);
     }
 }

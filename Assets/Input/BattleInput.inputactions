@@ -6,7 +6,7 @@
             "id": "85e82f7f-9e47-450e-a045-09adf0df65e8",
             "actions": [
                 {
-                    "name": "Shot",
+                    "name": "BulletShot",
                     "type": "Button",
                     "id": "1eb7b00e-0062-423d-9478-32f471c33a28",
                     "expectedControlType": "Button",
@@ -31,6 +31,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "LazerShot",
+                    "type": "Button",
+                    "id": "43e9335b-66c7-4a20-9c0d-b1ba5196fe41",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -41,7 +50,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Shot",
+                    "action": "BulletShot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -86,6 +95,17 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6d30670b-6ccb-4d91-b9a4-f68bb1af20fd",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "LazerShot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

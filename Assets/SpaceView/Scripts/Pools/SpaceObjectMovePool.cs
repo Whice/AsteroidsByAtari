@@ -76,9 +76,9 @@ namespace View
             {
                 this.playerMove = move;
             }
-            if (move is NLOMove nloMove)
+            if (move is AbstractMoveWithTarget moveWithTarget)
             {
-                nloMove.SetTarget(this.playerMove);
+                moveWithTarget.SetTarget(this.playerMove);
             }
 
             move.InitPool(this);

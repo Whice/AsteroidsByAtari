@@ -114,6 +114,7 @@ namespace View
         {
             if (this.isGameStarted)
             {
+                this.battleModel.PlayerBulletShot();
                 float delatTime = Time.deltaTime;
                 this.battleModel.Update(delatTime);
                 for (int i = 0; i < this.activeSpaceObjects.Count; i++)

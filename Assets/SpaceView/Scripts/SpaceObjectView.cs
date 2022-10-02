@@ -127,7 +127,7 @@ namespace View
         private void OnTriggerEnter2D(Collider2D collision)
         {
             SpaceObjectView view = collision.gameObject.GetComponent<SpaceObjectView>();
-            //this.modelSpaceObject.CollideWithObject(view.modelSpaceObject);
+            this.modelSpaceObject.CollideWithObject(view.modelSpaceObject);
         }
     }
 }
