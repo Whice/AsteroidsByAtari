@@ -106,7 +106,7 @@ namespace Assets.SpaceModel.PlayerClasses
         /// <summary>
         /// Время для обновления одного выстрела пулей.
         /// </summary>
-        private const Single TIME_FOR_NEXT_BULLET_SHOOT = 0.5f;
+        private const Single TIME_FOR_NEXT_BULLET_SHOOT = 0.25f;
         /// <summary>
         /// Прошло времени с послежнего пополнения зарядов.
         /// </summary>
