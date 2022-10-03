@@ -37,10 +37,43 @@ namespace Assets.SpaceModel
 
         #region Активные игровые объекты.
 
+        #region player
+
         /// <summary>
         /// Ссылка на игрока.
         /// </summary>
         private PlayerShip player;
+        /// <summary>
+        /// Информация о состоянии игрока.
+        /// </summary>
+        public struct PlayerInfo
+        {
+            public PlayerInfo(Single timeToRechargeLaser, Int32 chargeCount)
+            {
+                this.timeToRechargeLaser = timeToRechargeLaser;
+                this.chargeCount = chargeCount;
+            }
+            /// <summary>
+            /// Времени до пополнения заряда лазера.
+            /// </summary>
+            public Single timeToRechargeLaser;
+            /// <summary>
+            /// Количество зарядов.
+            /// </summary>
+            public Int32 chargeCount;
+        }
+        /// <summary>
+        /// Получить информацию об игроке.
+        /// </summary>
+        /// <returns></returns>
+        public PlayerInfo GetPlayerInfo()
+        {
+           return new PlayerInfo(this.player.timeToRechargeLaser, this.player.chargeCount);
+
+        }
+
+        #endregion player
+
         /// <summary>
         /// Список активных игровых предметов.
         /// <br/>Решил сделать список, т.к. будет часто выполняться обход всех

@@ -19,7 +19,7 @@ namespace View
         /// Произошел выход за боевую зону.
         /// Если объект улетел слишком далеко, то его стоит удалить.
         /// </summary>
-        public Action<Boolean> onOutFromBattleZone;
+        public event Action<Boolean> onOutFromBattleZone;
         /// <summary>
         /// Проверить выход в "открытый космос".
         /// Если объект улетел слишком далеко, то его стоит удалить.
@@ -101,6 +101,14 @@ namespace View
         /// Скорость, с которой передвигается объект.
         /// </summary>
         protected float speed;
+        /// <summary>
+        /// Получить мгновенную скорость передвижения объекта.
+        /// </summary>
+        /// <returns></returns>
+        public virtual float GetMovementSpeed()
+        {
+            return this.speed;
+        }
 
         /// <summary>
         /// Сдвинуть в заданном направлении объект с учетом времени.

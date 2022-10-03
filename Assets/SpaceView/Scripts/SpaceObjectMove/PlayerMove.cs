@@ -75,8 +75,13 @@ namespace View
 
         #region Общие методы класса передвижения.
 
+        /// <summary>
+        /// Последнее сохраненное значение времени между нынешним кадром и предыдущим.
+        /// </summary>
+        private float lastTick = 1;
         public override void Move(float tick)
         {
+            this.lastTick = tick;
             //Считать значения.
             float rotateValue = this.input.Player.Rotate.ReadValue<float>();
             this.isTurnOnLeft = rotateValue == -1;
@@ -119,6 +124,18 @@ namespace View
         {
             UnsubscribeInput();
             base.DestroyMoveObject();
+        }
+        public override float GetMovementSpeed()
+        {
+            if (inertia.x == 0 && inertia.y == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                Vector2 inertiaPerSecond = this.inertia / this.lastTick;
+                return inertiaPerSecond.magnitude;
+            }
         }
 
         #endregion Общие методы класса передвижения.

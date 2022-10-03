@@ -19,7 +19,7 @@ namespace View
         /// <summary>
         /// Инициализация прошла.
         /// </summary>
-        public Action OnInited;
+        public event Action OnInited;
         /// <summary>
         /// Представление было инициализировано.
         /// </summary>

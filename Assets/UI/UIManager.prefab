@@ -46,3 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   battleManager: {fileID: 0}
   endGamePanelTemplate: {fileID: 1385749224463519118, guid: aa6eff4b83caf7749bf21f336899881f, type: 3}
+  playerInfoPanelTemplate: {fileID: 8137235515853729281, guid: 7b4b881eb5650694ab0ca95a5661a166, type: 3}

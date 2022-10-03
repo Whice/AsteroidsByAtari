@@ -575,7 +575,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5777881054354305030, guid: 1bf9a6578bf11534280f0b8114e2519b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7321461809001739568, guid: 1bf9a6578bf11534280f0b8114e2519b, type: 3}
       propertyPath: battleManager

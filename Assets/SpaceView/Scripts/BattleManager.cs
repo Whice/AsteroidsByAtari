@@ -48,6 +48,10 @@ namespace View
         /// Модель боя.
         /// </summary>
         public BattleModel battleModel { get; private set; }
+        /// <summary>
+        /// Представление игрока.
+        /// </summary>
+        public SpaceObjectView playerView { get; private set; }
 
         /// <summary>
         /// Большой астероид для создания его частей.
@@ -96,7 +100,7 @@ namespace View
         {
             SpaceObjectViewPool pool = PoolsKeeper.instance.GetSpaceObjectViewPool();
             SpaceObjectView view = null;
-             if (sObject.type == SpaceObjectType.asteroidShard)
+            if (sObject.type == SpaceObjectType.asteroidShard)
             {
                 if (this.destroyedBigAsteroids.Count > 0)
                 {
@@ -127,6 +131,12 @@ namespace View
                 this.battleView.battleFieldBorders
                 );
             }
+
+            if (sObject.type == SpaceObjectType.player)
+            {
+                this.playerView = view;
+            }
+
             this.activeSpaceObjects.Add(view);
             if (view.transform.parent == null)
                 view.transform.SetParent(this.activeObjectPlaceInHierarchy, false);
@@ -174,6 +184,10 @@ namespace View
 
 
         /// <summary>
+        /// Событие, которое срабатывает после начала игры.
+        /// </summary>
+        public event Action onGameStarted;
+        /// <summary>
         /// Игра началась.
         /// </summary>
         private Boolean isGameStarted = false;
@@ -186,13 +200,14 @@ namespace View
             this.battleInput.Player.LazerShot.performed += (context) => this.battleModel.PlayerLazerShot();
             this.battleModel.StartGame();
             this.isGameStarted = true;
+            this.onGameStarted?.Invoke();
         }
 
         /// <summary>
         /// Событие окончания игры.
         /// <br/>В аргументы передается информация об игре на момент ее окончания.
         /// </summary>
-        public Action<BattleInfo> onGameEnded;
+        public event Action<BattleInfo> onGameEnded;
         /// <summary>
         /// Выполнить окончание боя.
         /// </summary>

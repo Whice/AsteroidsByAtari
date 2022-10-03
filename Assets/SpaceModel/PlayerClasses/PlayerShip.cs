@@ -15,7 +15,7 @@ namespace Assets.SpaceModel.PlayerClasses
         }
         public override void SetMaxHP()
         {
-            this.hp = 3;
+            this.hp = 1;
         }
         public override Boolean CollideWithObject(SpaceObject spaceObject)
         {
@@ -91,9 +91,20 @@ namespace Assets.SpaceModel.PlayerClasses
         /// </summary>
         private const Single TIME_FOR_INCREASE_CHARGE_COUNT = 5F;
         /// <summary>
-        /// Прошло времени с послежнего пополнения зарядов.
+        /// Прошло времени с последнего пополнения зарядов.
         /// </summary>
         private Single leftTimeAfterLastIncreaseChargeCount = 0;
+        /// <summary>
+        /// Времени до пополнения заряда лазера.
+        /// </summary>
+        public Single timeToRechargeLaser
+        {
+            get
+            {
+                float time = TIME_FOR_INCREASE_CHARGE_COUNT - this.leftTimeAfterLastIncreaseChargeCount;
+                return time;
+            }
+        }
 
         #endregion Количество зарядов лазером.
 
