@@ -19,6 +19,10 @@ public class BattlePrefabPool
     }
 
     private Dictionary<Int32, Stack<GameObject>> pool = new Dictionary<Int32, Stack<GameObject>>();
+    public void Reset()
+    {
+        this.pool = new Dictionary<int, Stack<GameObject>>();
+    }
     /// <summary>
     /// Получить боевой объект.
     /// </summary>

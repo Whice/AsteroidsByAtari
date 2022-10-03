@@ -20,10 +20,10 @@ namespace Assets.SpaceModel.DangerSpaceObjects
         /// <returns></returns>
         public abstract Int32 GetScore();
 
-        public override void Destroy()
+        public override void Destroy(Boolean isNow = false)
         {
             this.isNeedGetScore = false;
-            base.Destroy();
+            base.Destroy(isNow);
         }
     }
 }

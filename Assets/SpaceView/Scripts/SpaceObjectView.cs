@@ -125,6 +125,8 @@ namespace View
             this.moveComponent = null;
             this.modelSpaceObjectPrivate = null;
             this.pool.PushSpaceObjectView(this);
+            this.pool = null;
+            this.spritePrefab = null;
             this.gameObject.name = "SpaceObjectView";
         }
         /// <summary>

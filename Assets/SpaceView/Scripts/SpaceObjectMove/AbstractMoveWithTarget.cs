@@ -20,5 +20,10 @@ namespace View
         {
             this.target = target;
         }
+        public override void DestroyMoveObject()
+        {
+            base.DestroyMoveObject();
+            this.target = null;
+        }
     }
 }

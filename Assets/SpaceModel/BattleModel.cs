@@ -48,15 +48,6 @@ namespace Assets.SpaceModel
         /// </summary>
         private List<SpaceObject> activeObects = new List<SpaceObject>(100);
         /// <summary>
-        /// Событие начала игры.
-        /// </summary>
-        public event Action onStartedGame;
-        /// <summary>
-        /// Событие конца игры.
-        /// Передает информацию о состоянии боя на момент окончания.
-        /// </summary>
-        public event Action<BattleInfo> onEndedGame;
-        /// <summary>
         /// Количество осколков астероида должно появиться после его уничтожения.
         /// </summary>
         public Int32 shardsAfterDestroyBigAsteroidCount = 3;
@@ -86,7 +77,25 @@ namespace Assets.SpaceModel
         /// Произошло уничтожение игрока
         /// </summary>
         public event Action<SpaceObject> OnDestroedActiveObject;
-       
+     
+        /// <summary>
+        /// Получить индекс объекта в списке активных.
+        /// </summary>
+        /// <param name="spaceObject"></param>
+        /// <returns></returns>
+        private Int32 GetIndexSpaceObjectInActives(SpaceObject spaceObject)
+        {
+            for (Int32 i = 0; i < this.activeObects.Count; i++)
+            {
+                if (this.activeObects[i] == spaceObject)
+                {
+                    return i;
+                }
+            }
+            logger.ErrorMessage("Index not found!");
+
+            return -1;
+        }
         /// <summary>
         /// Выпонить действия при уничтожении игрового объекта.
         /// </summary>
@@ -116,11 +125,17 @@ namespace Assets.SpaceModel
                 CreateSpaceObject(SpaceObjectType.asteroidShard, this.shardsAfterDestroyBigAsteroidCount);
             }
 
+            this.activeObects.RemoveAt(GetIndexSpaceObjectInActives(spaceObject));
+
             //Уничтожение игрока означает конец игры.
             if (spaceObject.type == SpaceObjectType.player)
             {
-                this.onEndedGame?.Invoke(this.battleInfo);
+                spaceObject.Destroy();
+                OnGameEnd();
+                return;
             }
+            
+                    
         }
         /// <summary>
         /// Событие создания игрового объекта.
@@ -285,6 +300,16 @@ namespace Assets.SpaceModel
             }
         }
 
+
+        /// <summary>
+        /// Событие начала игры.
+        /// </summary>
+        public event Action onStartedGame;
+        /// <summary>
+        /// Событие конца игры.
+        /// Передает информацию о состоянии боя на момент окончания.
+        /// </summary>
+        public event Action<BattleInfo> onEndedGame;
         /// <summary>
         /// Начать игру.
         /// Во время старта игры происходит инициализация всех внутренних классов.
@@ -308,6 +333,26 @@ namespace Assets.SpaceModel
 
 
             this.onStartedGame?.Invoke();
+        }
+        /// <summary>
+        /// Окончить игру.
+        /// </summary>
+        private void OnGameEnd()
+        {
+            this.player = null;
+            Int32 countShards = this.shardsAfterDestroyBigAsteroidCount;
+            this.shardsAfterDestroyBigAsteroidCount = 0;
+            Int32 lastIndex = this.activeObects.Count - 1;
+            do
+            {
+                this.activeObects[lastIndex].Destroy(true);
+                --lastIndex;
+            }
+            while (lastIndex > -1) ;
+            this.shardsAfterDestroyBigAsteroidCount = countShards;
+
+            this.onEndedGame?.Invoke(this.battleInfo);
+
         }
     }
 }

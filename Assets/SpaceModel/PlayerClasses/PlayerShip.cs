@@ -25,12 +25,8 @@ namespace Assets.SpaceModel.PlayerClasses
                 type == SpaceObjectType.asteroidShard ||
                 type == SpaceObjectType.bigAsteroid;
 
-            //при столкновении с опасным объектом игрок проигрывает,
-            //а значит надо выполнить соответсвующие действия.
-            if(dangerType)
-            {
-                return true;
-            }
+            this.isNeedIncreaseHP = dangerType;
+            
 
             return false;
         }

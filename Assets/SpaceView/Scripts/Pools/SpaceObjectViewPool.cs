@@ -15,6 +15,10 @@ namespace View
         /// Пулл объектов для переиспользования.
         /// </summary>
         private Stack<SpaceObjectView> pool = new Stack<SpaceObjectView>(100);
+        public void Reset()
+        {
+            this.pool = new Stack<SpaceObjectView>();
+        }
         public SpaceObjectViewPool(SpaceObjectView templateObject)
         {
             this.templateObject = templateObject;

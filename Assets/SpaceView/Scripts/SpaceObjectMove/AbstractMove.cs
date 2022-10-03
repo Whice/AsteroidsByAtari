@@ -19,7 +19,7 @@ namespace View
         /// Произошел выход за боевую зону.
         /// Если объект улетел слишком далеко, то его стоит удалить.
         /// </summary>
-        public Action onOutFromBattleZone;
+        public Action<Boolean> onOutFromBattleZone;
         /// <summary>
         /// Проверить выход в "открытый космос".
         /// Если объект улетел слишком далеко, то его стоит удалить.
@@ -32,21 +32,21 @@ namespace View
             //x
             if (position.x > borders.right)
             {
-                this.onOutFromBattleZone?.Invoke();
+                this.onOutFromBattleZone?.Invoke(true);
             }
             else if (position.x < borders.left)
             {
-                this.onOutFromBattleZone?.Invoke();
+                this.onOutFromBattleZone?.Invoke(true);
             }
 
             //y
             else if (position.y > borders.up)
             {
-                this.onOutFromBattleZone?.Invoke();
+                this.onOutFromBattleZone?.Invoke(true);
             }
             else if (position.y < borders.bottom)
             {
-                this.onOutFromBattleZone?.Invoke();
+                this.onOutFromBattleZone?.Invoke(true);
             }
         }
         #endregion Borders
@@ -132,6 +132,8 @@ namespace View
         public virtual void DestroyMoveObject()
         {
             this.pool.PushMoveComponent(this);
+            this.pool = null;
+            this.spaceObjectTransform = null;
         }
 
         #endregion Pool

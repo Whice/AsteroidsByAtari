@@ -16,6 +16,12 @@ namespace View
             this.spaceObjectViewPool = new SpaceObjectViewPool(templateObject);
             this.spaceObjectMovePool = new SpaceObjectMovePool(battleFieldborders);
         }
+        public void ResetPools()
+        {
+            this.battlePrefabPool.Reset();
+            this.spaceObjectMovePool.Reset();
+            this.spaceObjectViewPool.Reset();
+        }
         public BattlePrefabPool GetBattlePrefabPool()
         {
             return this.battlePrefabPool;

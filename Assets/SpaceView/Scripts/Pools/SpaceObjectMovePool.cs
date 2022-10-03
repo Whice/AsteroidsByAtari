@@ -16,6 +16,10 @@ namespace View
         /// Словарь наборов объектов для передвижения: тип->стэк наборов.
         /// </summary>
         private Dictionary<Int32, Stack<AbstractMove>> pool = new Dictionary<Int32, Stack<AbstractMove>>();
+        public void Reset()
+        {
+            this.pool = new Dictionary<int, Stack<AbstractMove>>();
+        }
         /// <summary>
         /// Компонент передвижения игрока.
         /// </summary>

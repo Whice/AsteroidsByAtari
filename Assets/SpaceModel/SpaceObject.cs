@@ -167,9 +167,17 @@ namespace Assets.SpaceModel
         /// <summary>
         /// Разушить объект просто установив ему значение hp = 0.
         /// </summary>
-        public virtual void Destroy()
+        /// <param name="isNow">Уничтожить объект сразу, в этом же кадре.</param>
+        public virtual void Destroy(Boolean isNow = false)
         {
-            this.isNeedSetHPZero = true;
+            if (isNow)
+            {
+                this.hp = 0;
+            }
+            else
+            {
+                this.isNeedSetHPZero = true;
+            }
         }
 
         /// <summary>

@@ -11,8 +11,10 @@ public class BattlePrefabProvider : ScriptableObject
     [Serializable]
    private class PrefabWithID
     {
+#pragma warning disable CS0649
         public Int32 id;
         public GameObject prefab;
+#pragma warning restore CS0649
     }
 
     [SerializeField]

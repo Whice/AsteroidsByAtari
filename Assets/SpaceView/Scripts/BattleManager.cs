@@ -32,6 +32,12 @@ namespace View
         private Transform activeObjectPlaceInHierarchy = null;
         private void Awake()
         {
+            this.battleModel = new BattleModel();
+
+            this.battleModel.onCreatedSpaceObject += OnCreateSpaceObject;
+            this.battleModel.OnDestroedActiveObject += OnDestoySpaceObject;
+            this.battleModel.onEndedGame += OnEndGame;
+
             if (!this.battleView.isInited)
                 this.battleView.OnInited += StartGame;
             else
@@ -41,7 +47,7 @@ namespace View
         /// <summary>
         /// Модель боя.
         /// </summary>
-        private BattleModel battleModel = new BattleModel();
+        public BattleModel battleModel { get; private set; }
 
         /// <summary>
         /// Большой астероид для создания его частей.
@@ -144,11 +150,16 @@ namespace View
             }
             if (soView == null || indexForRemove == -1)
             {
-                LogError("The specified SpaceObjectView is not found among the active objects!");
+                LogError($"The specified SpaceObjectView is not found among the active objects for {sObject.type}!");
                 return;
             }
 
-            if (sObject.type == SpaceObjectType.bigAsteroid)
+            if(sObject.type== SpaceObjectType.player)
+            {
+                this.isGameStarted = false;
+            }
+
+            if (sObject.type == SpaceObjectType.bigAsteroid && this.isGameStarted)
             {
                 BigSteroidForShards target = new BigSteroidForShards(this.battleModel.shardsAfterDestroyBigAsteroidCount, soView);
                 this.destroyedBigAsteroids.Add(target);
@@ -172,25 +183,23 @@ namespace View
         public void StartGame()
         {
             this.battleInput = InputSystemProvider.instance.battlePlayerInputSystem;
-            this.battleModel.onCreatedSpaceObject += OnCreateSpaceObject;
-            this.battleModel.OnDestroedActiveObject += OnDestoySpaceObject;
-            this.battleModel.onEndedGame += OnEndGame;
             this.battleInput.Player.LazerShot.performed += (context) => this.battleModel.PlayerLazerShot();
             this.battleModel.StartGame();
             this.isGameStarted = true;
         }
 
         /// <summary>
+        /// Событие окончания игры.
+        /// <br/>В аргументы передается информация об игре на момент ее окончания.
+        /// </summary>
+        public Action<BattleInfo> onGameEnded;
+        /// <summary>
         /// Выполнить окончание боя.
         /// </summary>
         /// <param name="info"></param>
         private void OnEndGame(BattleInfo info)
         {
-            this.isGameStarted = false;
-            for (Int32 i = 0; i < this.activeSpaceObjects.Count; i++)
-            {
-                this.activeSpaceObjects[i].DestroySpaceObject();
-            }
+            this.onGameEnded?.Invoke(info);
             this.battleInput.Player.LazerShot.performed -= (context) => this.battleModel.PlayerLazerShot();
         }
 
